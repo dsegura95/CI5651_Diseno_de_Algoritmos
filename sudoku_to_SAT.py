@@ -1,3 +1,8 @@
+#  Traductor de instancias de Sudoku a instancias de SAT
+#  Autores:
+#       - David Segura
+#       - Amin Arriaga
+
 from sys import argv
 
 def read_sudoku(string: str) -> [[int]]:
