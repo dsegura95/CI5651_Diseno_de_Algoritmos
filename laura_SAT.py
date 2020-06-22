@@ -1,4 +1,4 @@
-#   Resolvedor propio de SAT
+#  Resolvedor propio de SAT
 #  Autores:
 #       - David Segura
 #       - Amin Arriaga
@@ -186,6 +186,7 @@ def output(V: [int], result: int) -> str:
     for v, i in enumerate(V):
       text += "\nv " + str(int(v*i))
   return text
+
 
 if __name__ == "__main__":
     if len(argv) == 1:
