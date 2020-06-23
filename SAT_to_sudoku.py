@@ -35,6 +35,8 @@ def SAT_to_sudoku(V: [int]) -> (str, [[int]]):
   for i in range(len(V)):
     if V[i] == 1:
       i, j, d = F_inv(i, N)
+      if 10 <= d <= 35: d = chr(d+55)
+      elif d == 36: d = "."   
       sudoku[i][j] = d
 
   # Traducimos la matriz a un string
