@@ -87,7 +87,7 @@ if __name__ == "__main__":
         while sudoku and t:
             print(sudoku_solver(sudoku, t) + "\n")
             sudoku = input("Escriba la instancia del sudoku (enter para cancelar): ")
-            t = float("0" + input("Indique el tiempo maximo de ejecucion (enter para cancelar): "))
+            t = float("0" + input("Indique el tiempo maximo de ejecucion (enter para cancelar): ")
 
     elif len(argv) == 4:
         f = open(argv[1], "r")
@@ -95,12 +95,13 @@ if __name__ == "__main__":
         f.close()
         f = open(argv[2], "w")
         t = float(argv[3])
+        instancia = 1
         for s in sudokus:
             # Verificamos que no sean un salto de linea.
             if len(s) > 2:
-                sol = sudoku_solver(s[:-1], t)
-                print(sol)
-                f.write(sol + "\n")
+                f.write(sudoku_solver(s[:-1], t) + "\n")
+                print("Resuelta Instancia "+ str(instancia))
+                instancia += 1
         f.close()
 
     else:
