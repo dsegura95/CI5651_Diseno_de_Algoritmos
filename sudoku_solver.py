@@ -87,7 +87,7 @@ if __name__ == "__main__":
         while sudoku and t:
             print(sudoku_solver(sudoku, t) + "\n")
             sudoku = input("Escriba la instancia del sudoku (enter para cancelar): ")
-            t = float("0" + input("Indique el tiempo maximo de ejecucion (enter para cancelar): ")
+            t = float("0" + input("Indique el tiempo maximo de ejecucion (enter para cancelar): "))
 
     elif len(argv) == 4:
         f = open(argv[1], "r")

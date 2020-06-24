@@ -161,7 +161,6 @@ def laura_SAT(V: [int], C: [[int]], k: int) -> ([int], bool):
       for v in V_aux:
         if v != 0: sol.append(v)
         else: sol.append(-1)
-      print(output(sol, 1))
       return sol.copy(), False
 
     # Si hay mas clausuras, verificamos si hay alguna solucion en futuras ramas
@@ -199,16 +198,20 @@ if __name__ == "__main__":
             return sat
 
         sat = input_sat()
-        V, C = read_SAT(sat)
-        V_result, conflict = laura_SAT(V, C, 1)
-        print("\n" + output(V_result, int(not conflict)))
+        while sat != "p cnf  \n":
+          V, C = read_SAT(sat)
+          V_result, conflict = laura_SAT(V, C, 1)
+          print("\n" + output(V_result, int(not conflict)) + "\n")
+          sat = input_sat()
 
     elif len(argv) == 2:
         file_sats = argv[1]
         f = open(file_sats, "r")
-        sat = f.readlines()
+        sat = f.read()
         f.close()
 
-        print(output(laura_SAT(read_SAT(sat))))
+        V, C = read_SAT(sat)
+        V_result, conflict = laura_SAT(V, C, 1)
+        print("\n" + output(V_result, int(not conflict)) + "\n")
     else:
         raise Exception("Numero de argumentos invalidos.")

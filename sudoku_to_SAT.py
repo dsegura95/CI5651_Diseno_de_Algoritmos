@@ -132,14 +132,18 @@ if __name__ == "__main__":
         while sudoku:
             print(sudoku_to_SAT(read_sudoku(sudoku)))
             sudoku = input("Escriba la instancia del sudoku (enter para cancelar): ")
-    elif len(argv) == 2:
-        file_sudokus = argv[1]
-        f = open(file_sudokus, "r")
+    elif len(argv) == 3:
+        f = open(argv[1], "r")
         sudokus = f.readlines()
         f.close()
 
+        i = 0
         for s in sudokus:
             if len(s) > 2:
-                print(sudoku_to_SAT(read_sudoku(s[:-1])))
+                if i == 0: f = open(argv[2], "w")
+                else: f = open(argv[2] + "(" + str(i) + ")", "w")
+                f.write(sudoku_to_SAT(read_sudoku(s[:-1])))
+                i += 1
+                f.close()
     else:
         raise Exception("Numero de argumentos invalidos.")
