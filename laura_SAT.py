@@ -115,10 +115,10 @@ def verify_units(V: [int], C: [[int]]) -> bool:
       if len(C[i]) == 1:
         # Si el valor de la variable de la clausura unitaria es el negado del
         # valor que le ibamos a signar, conflicto.
-        if V[abs(C[i][0])-1] == -C[i][0]/abs(C[i][0]):
+        if V[abs(C[i][0])-1] == int(-C[i][0]/abs(C[i][0])):
           return True
         v_units.append(abs(C[i][0]))
-        V[abs(C[i][0])-1] = C[i][0]/abs(C[i][0])
+        V[abs(C[i][0])-1] = int(C[i][0]/abs(C[i][0]))
         units = True
     
     for k in v_units:
@@ -160,7 +160,8 @@ def laura_SAT(V: [int], C: [[int]], k: int) -> ([int], bool):
       sol = []
       for v in V_aux:
         if v != 0: sol.append(v)
-        else: sol.append(1)
+        else: sol.append(-1)
+      print(output(sol, 1))
       return sol.copy(), False
 
     # Si hay mas clausuras, verificamos si hay alguna solucion en futuras ramas
@@ -183,8 +184,8 @@ def output(V: [int], result: int) -> str:
   """
   text = "s cnf " + str(result) + " " + str(len(V))
   if result == 1:
-    for v, i in enumerate(V):
-      text += "\nv " + str(int(v*i))
+    for i, v in enumerate(V):
+      text += "\nv " + str(int(v*(i+1)))
   return text
 
 
@@ -199,7 +200,7 @@ if __name__ == "__main__":
 
         sat = input_sat()
         V, C = read_SAT(sat)
-        V_result, conflict = laura_SAT(V, C, 0)
+        V_result, conflict = laura_SAT(V, C, 1)
         print("\n" + output(V_result, int(not conflict)))
 
     elif len(argv) == 2:
