@@ -127,13 +127,25 @@ def verify_units(V: [int], C: [[int]]) -> bool:
         return True
   return False
 
-def laura_SAT(V: [int], C: [[int]], k: int) -> ([int], bool):
+def search_amin_zero(V: [int]) -> (int):
+  """ 
+  Dado un arreglo de Variables buscara el menor numero que aun no
+  haya sido asignado
+  INPUT:
+    - V:  Variables.
+  OUTPUT:
+    - int: Valor del indice de la minima variable que no asignada.
+  """
+  for i in range(len(V)):
+    if V[i] == 0:
+      return i
+
+def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
   """ 
   SAT-Solver
   INPUT:
     - V:  Variables.
     - C:  Clausuras.
-    - k:  Se modificaran las variables (k-1)-esima en adelante.
   OUTPUT:
     - [int]:  Valores de las variables en caso de haber solucion, [] en caso
               contrario
@@ -144,7 +156,7 @@ def laura_SAT(V: [int], C: [[int]], k: int) -> ([int], bool):
     # Hacemos una copia para no modificar los originales.
     V_aux = V.copy()
     C_aux = [c.copy() for c in C]
-
+    k = search_amin_zero(V_aux) + 1
     # Asignamos primero 1 luego -1 a la (k-1)-esima variable.
     V_aux[k-1] = 1-2*i
     # Actualizamos las clausuras debido a la nueva asignacion.
@@ -164,7 +176,7 @@ def laura_SAT(V: [int], C: [[int]], k: int) -> ([int], bool):
       return sol.copy(), False
 
     # Si hay mas clausuras, verificamos si hay alguna solucion en futuras ramas
-    sol, conflict = laura_SAT(V_aux, C_aux, k+1)
+    sol, conflict = laura_SAT(V_aux, C_aux)
     # Si una de las ramas logro retornar el resultado, retornamos dicho resultado
     if not conflict:
       return sol, False
@@ -199,7 +211,7 @@ if __name__ == "__main__":
 
         sat = input_sat()
         V, C = read_SAT(sat)
-        V_result, conflict = laura_SAT(V, C, 0)
+        V_result, conflict = laura_SAT(V, C)
         print("\n" + output(V_result, int(not conflict)))
 
     elif len(argv) == 2:
@@ -208,6 +220,8 @@ if __name__ == "__main__":
         sat = f.readlines()
         f.close()
 
-        print(output(laura_SAT(read_SAT(sat))))
+        V, C = read_SAT(sat)
+        V_result, conflict = laura_SAT(V, C)
+        print("\n" + output(V_result, int(not conflict)) + "\n")
     else:
         raise Exception("Numero de argumentos invalidos.")

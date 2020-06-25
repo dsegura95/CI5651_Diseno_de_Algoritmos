@@ -49,7 +49,7 @@ def timer(f, t_max: float, *args) -> float:
 def get_solution(V: [int], C: [[int]], result: multiprocessing.Queue):
     """ Funcion que ejecuta laura_SAT y guarda se resultado en una cola
     de multiprocessing. """
-    result.put(laura_SAT(V, C, 0))
+    result.put(laura_SAT(V, C))
   
 def sudoku_solver(sudoku: str, t_max: float) -> str:
     """ 
