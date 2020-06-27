@@ -1,5 +1,5 @@
 # Resolvedor de Sudoku
-Proyecto de CI-5651 "Traductores e Interpretadores". 
+Proyecto de CI-5651 "Diseño de Algoritmos I". 
 
 _Implementación de un resolvedor de Sudoku, el cual traduce la instancia de Sudoku a un problema SAT (Boolean SATisfiability Problem) y resuelve dicho problema. Los detalles de los objetivos del programa se encuentran en el archivo [proyecto1.pdf](https://github.com/dsegura95/CI5651_Diseno_de_Algoritmos/blob/master/proyecto1.pdf)_
 
