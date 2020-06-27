@@ -49,7 +49,7 @@ def F(i: int, j: int, d: int, N: int) -> int:
 def plus(i: int, j: int, N: int, k: int) -> (int, int):
   """ 
   Dada la posicion de una casilla en el tablero de sudoku, retorna la posicion
-  de la siguiente casilla dentro de la misma seccion. 
+  de la siguiente casilla dentro de la misma seccion. Solo gozalo.
   INPUT:
     - i:  Fila.
     - j:  Columna.
@@ -59,8 +59,22 @@ def plus(i: int, j: int, N: int, k: int) -> (int, int):
     - int:  Primera coordenada de la siguiente casilla.
     - int:  Segunda coordenada de la siguiente casilla.
   """
-  # Esta dificil explicarlo a_a, pero funciona. Solo gozalo.
-  return i+int((j+1)/((k%N+1)*N)), (j+1)%((k%N+1)*N) + (k%N)*N*int((j+1)/((k%N+1)*N))
+  D = N*(k%N) # Desplazamiento por seccion.
+
+  # Si el valor de la siguiente columna alcanza al desplazamiento por seccion
+  # mas el grado del sudoku, significa que debemos pasar a la siguiente fila
+  # por lo que se le aumenta 1. En caso contrario no se le suma nada.
+  sig_i = i+int((j+1)/(D+N))
+
+  # El termino de la izquierda se encarga que la columna no supere el desplazamiento
+  # mas el grado del sudoku, que corresponderia a la ultima columna de la seccion mas 
+  # 1. Sin embargo, dejando solo este termino la columna regresaria a 0 al alcanzar
+  # dicho maximo, por lo tanto, el termino de la derecha notemos que es el mismo que
+  # el de sig_i multiplicado por el desplazamiento, esto significa que al superar
+  # la maxima columna, el termino de la izquierda es 0, y el de la derecha es 1 por 
+  # el desplazamiento, correspondiente a la primera columna de la seccion.
+  sig_j = (j+1)%(D+N) + D*int((j+1)/(D+N))
+  return sig_i, sig_j
 
 def sudoku_to_SAT(sudoku: [[int]]) -> str:
   """ 
