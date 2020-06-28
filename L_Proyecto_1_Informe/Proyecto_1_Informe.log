@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2020.1.9)  28 JUN 2020 15:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2020.1.9)  28 JUN 2020 16:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1118,12 +1118,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 218--219
 
  []
 
-[8]
+
 Underfull \hbox (badness 10000) in paragraph at lines 246--248
 
  []
 
-
+[8]
 Underfull \hbox (badness 10000) in paragraph at lines 252--253
 
  []
@@ -1165,7 +1165,7 @@ Here is how much of TeX's memory you used:
  31361 multiletter control sequences out of 15000+600000
  540091 words of font info for 52 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 62i,7n,71p,1951b,512s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,7n,71p,1835b,512s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
@@ -1179,7 +1179,7 @@ amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on Proyecto_1_Informe.pdf (10 pages, 186875 bytes).
+Output written on Proyecto_1_Informe.pdf (10 pages, 186795 bytes).
 PDF statistics:
  155 PDF objects out of 1000 (max. 8388607)
  127 compressed objects within 2 object streams
