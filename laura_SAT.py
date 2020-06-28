@@ -129,16 +129,18 @@ def verify_units(V: [int], C: [[int]]) -> bool:
 
 def search_amin_zero(V: [int]) -> (int):
   """ 
-  Dado un arreglo de Variables buscara el menor numero que aun no
-  haya sido asignado
+  Dado un arreglo de enteros, retornara la primera posicion donde
+  haya un cero.
   INPUT:
-    - V:  Variables.
+    - V:  Arreglo
   OUTPUT:
-    - int: Valor del indice de la minima variable que no asignada.
+    - int:  Indice tal que en esa posicion se encuentre un 0. Retorna
+            -1 si no hay ningun 0 en el arreglo.
   """
   for i in range(len(V)):
     if V[i] == 0:
       return i
+  return -1
 
 def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
   """ 
@@ -156,6 +158,8 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
     # Hacemos una copia para no modificar los originales.
     V_aux = V.copy()
     C_aux = [c.copy() for c in C]
+    # Verificamos cual es la siguiente variable a la que no se le ha
+    # asignado un valor.
     k = search_amin_zero(V_aux) + 1
     # Asignamos primero 1 luego -1 a la (k-1)-esima variable.
     V_aux[k-1] = 1-2*i
