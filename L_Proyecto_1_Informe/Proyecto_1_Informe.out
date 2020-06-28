@@ -1,0 +1,9 @@
+\BOOKMARK [1][-]{section.1}{Introducci\363n}{}% 1
+\BOOKMARK [1][-]{section.2}{Desarrollo}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Entrada}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Reducci\363n de Sudoku a SAT}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{SAT Solver}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{SAT a Sudoku}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{ZCHAFF}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.6}{Salida}{section.2}% 8
+\BOOKMARK [1][-]{section.3}{Conclusiones}{}% 9

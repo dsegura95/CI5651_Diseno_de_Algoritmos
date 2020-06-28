@@ -94,7 +94,11 @@ if __name__ == "__main__":
         sudoku = input("Escriba la instancia del sudoku (enter para cancelar): ")
         t = float("0" + input("Indique el tiempo maximo de ejecucion (enter para cancelar): "))
         while sudoku and t:
-            print(sudoku_solver(sudoku, t)[1] + "\n")
+            # Obtenemos la representacion matricial del sudoku.
+            sudoku_matrix = read_sudoku(sudoku)
+            # Obtenemos la representacion en SAT del sudoku.
+            sat = sudoku_to_SAT(sudoku_matrix)
+            print(sudoku_solver(sat, t)[1] + "\n")
             sudoku = input("Escriba la instancia del sudoku (enter para cancelar): ")
             t = float("0" + input("Indique el tiempo maximo de ejecucion (enter para cancelar): "))
 
