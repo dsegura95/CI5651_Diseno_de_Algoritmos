@@ -1,0 +1,294 @@
+\documentclass[letterpaper,12pt]{article}
+\usepackage{tabularx} % extra features for tabular environment
+\usepackage{amsmath}  % improve math presentation
+\usepackage{graphicx} % takes care of graphic including machinery
+\usepackage[margin=1in,letterpaper]{geometry} % decreases margins
+\usepackage{cite} % takes care of citations
+\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
+\hypersetup{
+	colorlinks=true,       % false: boxed links; true: colored links
+	linkcolor=blue,        % color of internal links
+	citecolor=blue,        % color of links to bibliography
+	filecolor=magenta,     % color of file links
+	urlcolor=blue         
+}
+\usepackage{blindtext}
+\usepackage{mathtools}
+\usepackage{tikzsymbols}
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+%++++++++++++++++++++++++++++++++++++++++
+
+
+\begin{document}
+
+\title{Proyecto 1 --- Sudoku Solver}
+\author{David Segura 13-11341 & Amin Arriaga 16-10072}
+\date{28 de Junio, 2020}
+\maketitle
+
+\begin{abstract}
+En este proyecto aplicamos todo el contenido estudiado en la materia Diseño de Algoritmos I dictada por el profesor Ricardo Monascal. \textbf{Nota especial:} Gran reconocimiento de agradecimiento al estudiante Amin Arriaga por decidirse a cursar la materia (by D10S).
+\end{abstract}
+
+
+\section{Introducción}
+
+Dado un número entero positivo $N$, un tablero de Sudoku de orden $N^2$ es una matrix de $N^2$ filas y
+$N^2$ columnas, donde la matriz está dividida en $N^2$ secciones disjuntas, cada una una matriz de tamaño $N$ x $N$, el proyecto requiere que se encuentre una solución a dicho Sudoku.\\
+\\
+Para conseguir una respuesta al problema debemos reducir la obtención de una solución para el Sudoku a una traducción en \textbf{SAT} (\textit{Boolean Satisfiability Problem}), donde se transforman las casillas del Sudoku a una expresión booleana con variables y sin cuantificadores, para saber si hay alguna asignación de valores para sus variables que hace que la expresión sea verdadera. De esta manera si se consigue, podemos traducir esa expresión de nuevo a una solución para el Sudoku y dar el objetivo por cumplido.
+
+\section{Desarrollo}
+
+\subsection{Entrada}
+Cada instancia será representada por una linea de texto con el siguiente formato: \\
+
+• Un entero $N$, tal que $1 \leq N \leq 3$\\
+
+• Un espacio en blanco\\
+
+• Una cadena $T$ de $N^2$ números, donde $0 \leq T_i \leq N$\\
+
+\hspace{1cm}– Si $T_i$ = 0 la casilla está vacía\\
+
+\hspace{1cm}– Si $T_i \neq$ 0 la casilla tiene el dígito $T_i$\\
+\\
+Por ejemplo, la siguiente cadena representa a nuestro ejemplo de tablero de Sudoku de orden 3.\\
+
+\footnotesize{3 000400009020980030093000840000000000200008067160300002049000650600003000000059010}\\
+\\
+\normalsize
+La entrada del programa será un archivo con tantas líneas como instancias se quieran resolver.
+
+\subsection{Reducción de Sudoku a SAT}\\
+
+Es posible reducir cualquier instancia de Sudoku a SAT, representando el estado del tablero con variables y cláusulas de una fórmula en CNF (\textit{Forma Normal Conjuntiva}).\\
+\\
+Para la implementación de esta solución representaremos las casillas del tablero de Sudoku en variables con forma $x^d_{i,j}$, que serán verdaderas si la casilla $(i,j)$ del tablero tiene el número $d$.\\
+\\
+Hallamos una biyección entre la variable que se representará en SAT y la casilla del tablero a la que pertenece para crear las clausulas correspondientes al problema en SAT.\\
+
+Esta biyección viene dada por:\\
+
+$f: Variables \rightarrow [1,N^6]$
+\begin{equation*}
+    f(i,j,d) = i \text{x} N^4 + j \text{x} N^2 + d \hspace{1cm} \label{eq:1} (1)
+\end{equation*}\\
+
+$f^{-1} : [1,N^6] \rightarrow Variables$
+
+\begin{equation*}
+    f^{-1}(x) = \left(\floor*{\frac{x}{N^4}},  \floor*{\frac{mod(x,N^4)}{N^2}}, mod(x,N^2) + 1 \right) \hspace{1cm} \label{eq:2} (2)
+\end{equation*}\\
+\\
+La función (1) la representamos en nuestro programa $moduloquelocontiene.py$ a través de la función \texttt{F} y la función (2) mediante \texttt{F\_inv}.\\
+\\
+Dicho módulo se encarga de ejecutar la Reducción de Sudoku a SAT, donde la función principal \texttt{sudoku\_to\_SAT} mediante la creación de cláusulas para representar una solución válida.\\
+\\
+Estas cláusulas vienen dadas por la completitud, la unicidad, la validez y las variables instanciadas.\\
+\\
+Para la \textbf{completitud} simplemente se crean tantas cláusulas de tamaño $N^2$ como cantidad de casillas hay en la matriz por dígito. Las conjunciones quedarían con las siguientes cláusuras: \\
+
+\texttt{[F(i, j, 1, N),...., F(i, j, d, N),...., F(i, j, N$^2$, N)]} para $0 \leq i,j < N^2$ y $1 < d < N^2$\\
+\\
+La \textbf{unicidad} para cada par de números $d$ y $d'$ entre 1 y $N^2$, no puede haber una casilla en la matriz ocupadas al mismo tiempo por $d$ y $d'$, siendo $d \neq d'$. Sus cláusuras quedarian de la siguiente forma:\\
+
+\texttt{[-F(i, j, d, N),  -F(i, j, d', N)]} para 
+$0 \leq i,j < N^2$ y $1 \leq d < d' \leq N^2$\\
+\\
+Las \textbf{instancias de las variables} ya asignadas del sudoku también tendran sus cláusulas unitarias. La representación de esta cláusula viene dada de esta manera:\\
+
+\texttt{[F(i, j, sudoku[i][j], N)]} para $0 \leq i,j < N^2$\\
+\\
+Las cláusulas de \textbf{validez} estarán divididas en tres tipos: por filas, por columnas y por secciones. Por fila, tomaremos cada par de casillas y un dígito $d$ sólo puede estar en una de las dos, realizando las comparaciones por casilla, análogamente sucede con las columnas. En las secciones $k$, por cada par de casillas pertenecientes a la misma, no puede haber un dígito que ocupe a ambas. Las cláusulas para esta parte son:\\
+
+Para las filas:
+\texttt{[-F(i, j, d, N),  -F(i, j', d, N)]} para 
+$$0 \leq i < N^2, \hspace{0.8cm}$$
+$$\hspace{0.4mm} 0 \leq j < j'< N^2 \hspace{0.8cm} \texttt{y}$$ 
+$$1 \leq d \leq N^2 \hspace{0.8cm}$$\\
+
+Para las columnas:
+\texttt{[-F(i, j, d, N),  -F(i', j, d, N)]} para 
+$$0 \leq i < i'< N^2,\hspace{1cm}$$ 
+$$0 \leq j < N^2 \hspace{0.8cm} \texttt{y}$$
+$$1 \leq d \leq N^2\hspace{1cm}$$\\
+
+Para las secciones:
+\texttt{[-F(i, j, d, N),  -F(i', j', d, N)]} para 
+\begin{equation*}
+   N \floor*{\frac{k}{N}} \leq i \leq i' < N \floor*{\frac{k}{N}+1}-1 \texttt{,}
+\end{equation*}
+\begin{equation*}
+   N mod(k,N) \leq j, j' < N (mod(k,N) + 1) - 1 \texttt{,}
+\end{equation*}
+$$1 \leq d \leq N^2 \hspace{1cm} \texttt{y}$$
+$$0 \leq k < N^2 \hspace{1.2cm}$$
+
+donde $(i,j) \neq (i',j')$.\\
+\\
+Al final tendremos que solucionar una reducción a SAT con $|variables|= N^4$ y $|clausulas|= |completitud| + |unicidad| + |validez| + |instancias| = N^4 + \frac{N^8 - N^6}{2} + \frac{3(N^8-N^6)}{2} + |instancias|$ donde
+$ 0 \leq |instancias| \leq N^4$.\\
+\\
+La función \texttt{sudoku\_to\_SAT} recibe una matriz que representa la instancia del sudoku y retorna un string con la representación en SAT de la instancia del sudoku:
+
+\texttt{\\
+c Ejemplo de salida para sudoku\_to\_SAT\\
+c \\
+p cnf V C \\
+v1 -v2 0\\
+v3 -v4\\
+0\\
+v2\\
+.\\
+.\\
+.\\}\\
+La entrada de \texttt{sudoku\_to\_SAT} viene dada por la función \texttt{read\_sudoku}, la cual recibe la instancia del sudoku en string y devuelve una matriz $N$ x $N$, donde implementamos la extensión permitiendo que $1 \leq N \leq 6$.\\
+\\
+Dentro de la función \texttt{sudoku\_to\_SAT} hacemos uso de las funciones \texttt{F} y \texttt{plus}:\\
+
+\texttt{F}: es la función (1) antes mencionada en \ref{eq:1}, usada para obtener las transformaciones correspondientes.\\
+
+\texttt{plus}: recibe la posición de una casilla $(i,j)$ en el tablero de sudoku y retorna la posición de la siguiente casilla dentro de la misma sección $k$ mediante las siguiente formulas:
+
+\begin{equation*}
+   i = i + \floor*{\frac{j+1}{(mod(k,N)+1)N}}
+\end{equation*}
+
+\begin{equation*}
+   j = mod((j+1),(mod(k,N)+1)N) + mod(k,N)N \floor*{\frac{j+1}{(mod(k,N)+1)N}}
+\end{equation*}\\
+\\
+
+Esto funciona por la siguiente razón: si el valor de la siguiente columna alcanza al desplazamiento por sección mas el grado del sudoku, significa que debemos pasar a la siguiente fila por lo que se le aumenta 1. En caso contrario no se le suma nada. $sig\_i = i+int((j+1)/(D+N))$ El término de la izquierda se encarga que la columna no supere el desplazamiento más el grado del sudoku, que corresponderia a la última columna de la sección más 1. Sin embargo, dejando solo este término la columna regresaría a 0 al alcanzar dicho máximo, por lo tanto, el término de la derecha notemos que es el mismo que el de sig\_i multiplicado por el desplazamiento, esto significa que al superar la máxima columna, el término de la izquierda es 0, y el de la derecha es 1 por el desplazamiento, correspondiente a la primera columna de la sección.\\
+\\
+\textbf{Tiempo Asintóstico:}\\
+
+• \texttt{sudoku\_to\_SAT} $\in$ O($n^4$) donde $n = N^2$, debido a que estamos recorriendo una matriz $N^2 \times N^2$, comparando para cada par de casillas por fila/columna menos consigo mismo x $N^2-1$ para cada digito x $N^2$, quedando $N^2 \times N^2 \times (N^2-1) \times N^2 \approx (N^2)^4$.\\
+
+• \texttt{read\_sudoku} $\in$ O($n$) siendo $n$ = longitud de la instancia del sudoku, ya que debe recorrer el string de la instancia del sudoku digito por digito para asignarle su casilla correspondiente en la matriz.\\
+
+• \texttt{F} $\in$ O(1).\\
+
+• \texttt{plus} $\in$ O(1)\\
+\\
+\textbf{Memoria Asintótica:} FALTAA\\ 
+
+• \texttt{sudoku\_to\_SAT} $\in$ O(n$^4$).\\
+
+• \texttt{read\_sudoku} $\in$ O(n).\\
+
+• \texttt{F} $\in$ O(1).\\
+
+• \texttt{plus} $\in$ O(1).\\
+
+\subsection{SAT Solver}
+
+El Problema de Satisfacibilidad Booleana o SAT consta de intentar hallar una asignación de verdad para las variables, que hagan que la fórmula en lógica proposicional sea satisfecha (evalúe a true).\\
+\\
+Ya con el sudoku transformado en un problema SAT en formato CNF, implementamos una función llamada \texttt{read\_SAT} que recibe el problema en el formato mencionado y retorna dos arreglos, uno de vectores que dentro del programa tratamos como \textit{V}, el cual contiene valores inicializados en 0 para efectos más prácticos al momento de resolver el problema (no confundir con \textit{False}, ya que nosotros consideramos \textit{False} como -1 y \textit{True} como 1). La longitud de este arreglo será la cantidad de variables encontradas en el problema SAT donde cada posición en el vector representará a la variable en sí. El otro arreglo que devuelve son las cláusulas que formamos al momento de traducir la instancia del sudoku.\\
+\\
+Con estas dos estructuras de datos formadas, pasamos a la función estrella del programa, la llamamos \texttt{laura\_SAT} \Cooley, es una función recursiva que se compone de dos funciones importantes: \texttt{update\_C} y \texttt{verify\_units}. Hablemos primero de estas dos funciones para entender el funcionamiento de \texttt{laura\_SAT}:\\
+
+• \texttt{update\_C}: esta función recibe 3 parametros, \textit{V} que corresponde a las variables y su valor lógico, \textit{C} que son las cláusulas y \textit{k} que es una variable de \textit{V}. El objetivo es actualizar las cláusulas con respecto a la variable \textit{k} siguiendo las siguientes reglas:\\
+
+    - Si el literal encontrado en la cláusula es \textit{False}, se elimina dicho literal.\\
+    
+    - En caso contrario, si es \textit{True} se elimina toda la cláusula a la que pertenece.\\
+\\
+Si al actualizar las cláusulas alguna de ellas quedó vacía, significa que se hizo una mala asignación de literales y por ende la función retorna \textit{True}, que en el ambiente de \texttt{laura\_SAT} significa que hubo conflicto, de lo contrario la actualización resulto exisota.\\
+
+• \texttt{verify\_units}: en este método se realiza la verificación de cláusuras unitarias y en caso de haberlas actualiza las variables en consecuencia, colocándoles el mismo signo que posee en la cláusula, de esta manera se satisfacerán las clausulas unitarias, y si encuentra que ya la variable había sido asignada con el signo contrario, esta devuelve conflicto. Después que encuentra todas las cláusulas unitarias, realiza un actualización de cláusulas mediante \texttt{update\_C}, donde si da conflicto es porque se hizo una mala asignación de variables antes. Esta función recibe las variables \textit{V} y las cláusulas \textit{C} y retorna si hubo algún conflicto.\\
+\\
+También está la función \texttt{search\_amin\_zero}, que dado un arreglo de variables, buscará la variable más cercana que aún no haya sido asignada.\\
+\\
+Explicadas estas tres funciones podemos seguir con \texttt{laura\_SAT}, la cual nos basamos en el algoritmo de \textit{BFS}, comenzando desde nuestra primera variable (la raíz), explorando a sus vecinos más cercanos (las variables que comparten cláusula con él), y así hasta que se recorran todas la cláusulas.\\
+\\
+Seleccionando nuestra primera variable que aun no haya sido asignada (\texttt{search\_amin\_zero}), se le asigna primero el valor de \textit{True}, se actualizan las clásulas (\texttt{update\_C}) y luego se verifica si quedaron cláusulas unitarias (\texttt{verify\_units}). En caso de haber quedado un conflicto (alguna cláusula vacía) se prueba el valor de \textit{False}, de lo contrario se continua el recorrido para evaluar la siguiente variable y si ya tiene un valor asignado se ignora y se continua hasta encontrar otra variable y encontrarle una posible asignación o un conflicto. En caso de encontrar conflicto en algún punto, se devuelve para probar otro valor y si en la primera variable no se convergió con ninguno de los dos valores, devuelve que la formula es insatisfacible. \\
+\\
+\texttt{output}: Recibe el conjunto de las variables y la solución del problema en SAT y devuelve el string en formato CNF.\\
+\\
+\textbf{Tiempo Asintóstico:}\\
+
+• \texttt{read\_SAT}: sea $c$ el número de comentarios que en el formato CNF del problema SAT y $\ell$ la cantidad de literales, entonces la función va a tardar en leer el string y retornarlo en estructuras de datos en $c + \ell$ tiempo, esto es que \texttt{laura\_SAT} $\in$ O($c + \ell$).\\
+
+• \texttt{update\_C} recorrerá el arreglo de cláusulas para actualizarla, si $n$ es el tamaño del arreglo, entonces \texttt{update\_C} $\in$ O($n$).\\
+
+• \texttt{verify\_units} recorrerá el arreglo de cláusulas para encontrar las cláusulas unitarias. Tomemos $n$ como el tamaño de dicho arreglo. Existen dos casos: si todos las cláusulas son unitarias se recorreran todas a lo sumo $n$ veces, para así actualizarlas con \texttt{update\_C} en tiempo O($n$), haciendo esta operación por cada cláusula unitaria encontrada, es decir en $n^2$, quedando en total un ciclo de $n + n^2$. El otro caso es si hay $C$ cláusulas, donde la $i$-esima clausula tiene $C-i+1$ literales, siendo así la ultima cláusula unitaria. Entonces cuando se verifique si hay cláusulas unitarias lo hará en $n$ iteraciones. Cuando haya encontrado la cláusula unitaria aplicará \texttt{update\_C}, para solo esta variable, lo que hace que se recorra de nuevo $n$ veces, haciendo que aparezca de nuevo otra clásula unitaria y volverá a realizar el ciclo haciendólo $n$ veces. En total entonces nos queraría $(n + n)\times n$ aproximando un total de $n^2$ veces. Así tenemos cotas iguales para ambos peores casos, concluyendo que \texttt{verify\_units} $\in$ O($n^2$).\\
+
+• \texttt{laura\_SAT} $\in$ O(1)\\
+
+• \texttt{output}, \texttt{search\_amin\_zero} $\in$ O($V$) siendo $V$ el número de variables del problema.\\
+\\
+\textbf{Memoria Asintótica:} FALTAA\\ 
+
+• \texttt{read\_SAT} $\in$ O(n$^4$).\\
+
+• \texttt{update\_C} $\in$ O(n).\\
+
+• \texttt{verify\_units} $\in$ O(1).\\
+
+• \texttt{laura\_SAT} $\in$ O(1)\\
+
+• \texttt{output} $\in$ O(1)\\
+
+• \texttt{search\_amin\_zero} $\in$ O(1)\\
+
+\subsection{SAT a Sudoku}
+
+Ya en esta etapa del proyecto el mayor problema está resuelto, solo queda transformar las soluciones obtenidas al formato requerido. Esto lo hacemos mediante dos funciones:\\
+
+• \texttt{F\_inv}: esta función ya la definimos en \ref{eq:1} como (2), que recibirá un número correspondiente a una variable y retornará una posición en la matriz (fila y columna) y el valor contenida en ella.\\
+
+• \texttt{SAT\_to\_sudoku}: recibe un arreglo de variables que corresponden a la solución y las convierte en un string igual al que se recibe el sudoku a resolver:\\
+
+\footnotesize{3 000400009020980030093000840000000000200008067160300002049000650600003000000059010}\\
+\normalsize
+\\
+\textbf{Tiempo Asintóstico:}\\
+
+• \texttt{F\_inv} $\in$ O(1)\\
+
+• \texttt{SAT\_to\_sudoku} $\in$ O($V$) siendo $V$ el número de variables del problema.\\
+\\
+\textbf{Memoria Asintótica:} FALTAA\\ 
+
+• \texttt{F\_inv} $\in$ O(1)\\
+
+• \texttt{SAT\_to\_sudoku} $\in$ O($V$) siendo $V$ el número de variables del problema.\\
+
+\subsection{ZCHAFF}
+
+\href{https://www.princeton.edu/~chaff/zchaff.html}{ZCHAFF} es un resolvedor conocido para SAT, con tiempos de ejecución muy competitivos. Usa el mismo formato de entrada aquí expuesto y reporta sus soluciones con el mismo formato de salida. Con este programa compararemos nuestros resultados obtenidos.
+
+\subsection{Salida}
+
+En \texttt{sudoku\_solver.py} orquestamos todos los programas que implementamos para un funcionamiento completo. Además requerimos implementar algunas funciones más para poder dar unos resultados mejor elaborados, donde para cada instancia de sudoku resuelta, se le añade el tiempo que tardó nuestra implementación \texttt{laura\_SAT}. Todo esto se reporta mediante el terminal, donde se generará también un archivo .txt con las instancias de los sudokus resuelta. Al final de la ejecución se mostrará un gráfico en comparando nuestro algoritmo con el ZCHAFF. Las funciones que usamos en nuestro programa de salida son:\\
+
+• \texttt{timer}: usamos la librería \textit{multiprocessing} para llevar acabo el multiprocesamiento a través de hilos, donde a partir de un ciclo ejecutamos la función a procesar en un hilo $h_1$ y el otro hilo $h_2$ se encarga de estar activo durante un tiempo limite indicado. Cuando $h_2$ se pase del tiempo establecido, sale del ciclo y verifica si el otro hilo $h_1$ terminó, si no ha finalizado pues se termina asegurando que los dos hilos son finalizados. Recibe la función a ejecutar en $h_1$ y sus argumentos, y el tiempo límite a establecer donde tenemos por defectos que son 10 segundos.\\
+
+• \texttt{get\_solution}: simplemente guadará en una cola el resultado de ejecutar \texttt{laura\_SAT}. Recibe las entradas de \texttt{laura\_SAT} que son las variables y las cláusulas.\\
+
+• \texttt{sudoku\_solver}: es la función que se encarga de recibir las instancias del sudoku y el tiempo limite, y retornar los resultados. En esta función es donde manejamos todas las funciones anteriores para encontrar la solución al problema planteado. Tiene como nombre \texttt{sudoku\_solver} pero debió haberse llamado \texttt{dudamel}.\\
+\\
+\textbf{Tiempo Asintóstico:}\\
+
+• \texttt{timer}, \texttt{sudoku\_solver} $\in$ O(t) siento $t$ el tiempo limite establecido.\\
+
+• \texttt{get\_solution} $\in$ O($V$), lo mismo que \texttt{laura\_SAT}.\\
+\\
+\textbf{Memoria Asintótica:} FALTAA\\ 
+
+• \texttt{timer} $\in$ O(1)\\
+
+• \texttt{get\_solution} $\in$ O($V$) siendo $V$ el número de variables del problema.\\
+
+• \texttt{sudoku\_solver} $\in$ O(1).
+
+\section{Conclusiones}
+
+
+
+\end{document}

@@ -46,6 +46,12 @@ Programa principal del proyecto que llama a los módulos anteriores. Dada una in
 
 Donde ```FILE_IN```, ```FILE_OUT``` y ```TIME_MAX``` son parámetros opcionales e indican el nombre de un archivo con instancias de sudoku (uno por línea), otro donde guardar las soluciones y el tiempo máximo para resolver cada sudoku respectivamente. Si hay más de una instancia de sudoku, cada solución se almacenará en una linea de ```FILE_OUT```. En caso de ejecutar el programa sin parámetros, se iniciará una versión interactiva donde se podrán escribir instancias de sudokus y el tiempo maximo, luego el programa imprimirá su solución en caso de haberla conseguida. Para finalizar el programa, basta con dejar vacío alguno de los inputs.
 
+También se puede ejecutar de la siguiente forma:
+
+- ```$ python3 sudoku_solver FILE_IN TIME_MAX```
+- ```$ python3 sudoku_solver FILE_IN FILE_OUT```
+- ```$ python3 sudoku_solver FILE_IN```
+
 ## Wiki
 
 ### Implementación
