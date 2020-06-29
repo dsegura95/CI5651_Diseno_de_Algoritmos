@@ -161,8 +161,8 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
     # Verificamos cual es la siguiente variable a la que no se le ha
     # asignado un valor.
     k = search_amin_zero(V_aux) + 1
-    # Asignamos primero 1 luego -1 a la (k-1)-esima variable.
-    V_aux[k-1] = 1-2*i
+    # Asignamos primero -1 luego 1 a la (k-1)-esima variable.
+    V_aux[k-1] = signo
     # Actualizamos las clausuras debido a la nueva asignacion.
     if (update_C(V_aux, C_aux, k) or verify_units(V_aux, C_aux)):
       # Si dio conflicto con el negativo, no hay solucion en esta rama.
