@@ -55,11 +55,7 @@ También se puede ejecutar de la siguiente forma:
 ## Wiki
 
 ### Implementación
-<<<<<<< HEAD
-Para obtener los detalles de la implementación final, por favor lea el [Proyecto_1_Informe.pdf](https://github.com/dsegura95/CI5651_Diseno_de_Algoritmos/blob/master/Proyecto_1_Informe.pdf)
-=======
 Para obtener los detalles de la implementación final, por favor lea el [informe.pdf](https://github.com/dsegura95/CI5651_Diseno_de_Algoritmos/blob/master/informe.pdf)
->>>>>>> 8a0f66fcfe40b9dcc4bec798820a09c79611c290
 
 ### Autores
 * *David Segura*.
