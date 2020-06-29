@@ -50,8 +50,42 @@ def get_solution(V: [int], C: [[int]], result: multiprocessing.Queue):
     """ Funcion que ejecuta laura_SAT y guarda se resultado en una cola
     de multiprocessing. """
     result.put(laura_SAT(V, C))
-  
-def sudoku_solver(sat: str, t_max: float) -> (float, str):
+
+def print_sudoku(sudoku) -> str:
+    """ 
+    Metodo para imprimir un sudoku
+    INPUT:
+        - sudoku: recibe el sudoku en forma de Matriz
+    OUTPUT:
+        - str:    sudoku ya en formato de juego
+    """
+    N = abs(len(sudoku)**(1/2))
+    bar = ' '
+    row = ' '
+    final = ''
+    for i in range(len(sudoku)):
+        bar += '--'
+        if (i+1)%N == 0 and (i+1) != N**2:
+            if (i+1) / N > 1:
+                bar += '-+'
+            else:
+                bar += '+'
+
+    for i in range(len(sudoku)):
+        for j in range(len(sudoku)):
+            if sudoku[i][j] == 0:
+                row += '_ '
+            else:
+                row += str(sudoku[i][j]) + ' '
+            if (j+1)%N == 0 and (j+1) != N**2:
+                row += '| '
+        final += row + "\n"
+        row = ' '
+        if (i+1) % N == 0 and (i+1) != N**2:
+            final += bar + "\n"
+    return final
+
+def sudoku_solver(sat: str, t_max: float) -> (float, str,[[int]]):
     """ 
     Funcion que toma el string de una instancia de sudoku y
     lo resuelve.
@@ -72,9 +106,9 @@ def sudoku_solver(sat: str, t_max: float) -> (float, str):
     if t:
         V_sol, conflict = result.get()
         string_solution, m = SAT_to_sudoku(V_sol)
-        return (t, string_solution + " Time: " + str(t))
+        return (t, string_solution + " Time: " + str(t),m)
     else:
-        return (0,"Time expired.")
+        return (0,"Time expired.",[[0]])
 
 def zchaff_run(problem: str) -> str:
     """ 
@@ -99,7 +133,8 @@ if __name__ == "__main__":
             sudoku_matrix = read_sudoku(sudoku)
             # Obtenemos la representacion en SAT del sudoku.
             sat = sudoku_to_SAT(sudoku_matrix)
-            print(sudoku_solver(sat, t)[1] + "\n")
+            time, string_solution, solve_matrix = sudoku_solver(sat, t)
+            print(string_solution + "\n")
             sudoku = input("Escriba la instancia del sudoku (enter para cancelar): ")
             t = float("0" + input("Indique el tiempo maximo de ejecucion (enter para cancelar): "))
 
@@ -123,6 +158,7 @@ if __name__ == "__main__":
         elif len(argv) == 2:
             f = open("Soluciones.txt", "w")
             t = 15
+        g = open("Soluciones_Matrices.txt","w")
         instancia = 1
         laura_times = [[],[]]
         laura_fails = [[],[]]
@@ -134,16 +170,20 @@ if __name__ == "__main__":
                 sudoku_matrix = read_sudoku(s[:-1])
                 # Obtenemos la representacion en SAT del sudoku.
                 sat = sudoku_to_SAT(sudoku_matrix)
-                time_laura, to_file = sudoku_solver(sat, t)
+                time_laura, to_file, solve_matrix = sudoku_solver(sat, t)
                 time_zchaff = timer(zchaff_run, t, sat)
                 f.write(to_file + "\n")
                 print(">>> INSTANCIA ["+ str(instancia)+"]")
+                sudoku_instance = ">>> SUDOKU [" + str(instancia)+"]\n" + print_sudoku(sudoku_matrix)
+                g.write(sudoku_instance)
                 if time_laura != 0:
                     print("\tlaura_SAT time: " + str(time_laura))
+                    g.write("Solucion: \n" + print_sudoku(solve_matrix) + "\n")
                     laura_times[0].append(instancia)
                     laura_times[1].append(time_laura)
                 else:
                     print("\tlaura_SAT time: " + to_file)
+                    g.write("Solucion: " + to_file + "\n")
                     laura_fails[0].append(instancia)
                     laura_fails[1].append(t)
                 print("\tZCHAFF time: " + str(time_zchaff))
@@ -160,6 +200,7 @@ if __name__ == "__main__":
         plt.legend()
         plt.yscale('log')
         plt.show()
+        g.close()
         f.close()
     else:
         raise Exception("Numero de argumentos invalidos.")
