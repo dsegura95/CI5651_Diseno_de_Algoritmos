@@ -76,7 +76,7 @@ def sudoku_solver(sat: str, t_max: float) -> (float, str):
     else:
         return (0,"Time expired.")
 
-def zchaff_run(problem) -> str:
+def zchaff_run(problem: str) -> str:
     """ 
     Funcion que toma el string en formato CNF de una instancia de sudoku y
     lo resuelve con ZCHAFF.
@@ -86,8 +86,9 @@ def zchaff_run(problem) -> str:
     # Cambiamos de directorio al de zchaff
     os.chdir('./zchaff')
     # Ejecutamos el programa
-    subprocess.run(["./zchaff", problem],capture_output=True)
+    subprocess.run(["./zchaff", problem], capture_output=True)
     os.chdir('../')
+
 
 if __name__ == "__main__":
     if len(argv) == 1:
