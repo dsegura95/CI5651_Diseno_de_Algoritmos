@@ -110,7 +110,11 @@ def sudoku_solver(sat: str, t_max: float) -> (float, str,[[int]]):
     else:
         return (0,"Time expired.",[[0]])
 
+<<<<<<< HEAD
 def zchaff_run(path,problem) -> str:
+=======
+def zchaff_run(problem: str) -> str:
+>>>>>>> 440a59a691b384557a74339f6f2930bb986db5af
     """ 
     Funcion que toma el string en formato CNF de una instancia de sudoku y
     lo resuelve con ZCHAFF.
@@ -121,9 +125,10 @@ def zchaff_run(path,problem) -> str:
     # Cambiamos de directorio al de zchaff
     os.chdir('./'+path)
     # Ejecutamos el programa
-    subprocess.run(["./zchaff", problem],capture_output=True)
+    subprocess.run(["./zchaff", problem], capture_output=True)
     os.chdir('../')
 
+<<<<<<< HEAD
 def compile_zchaff(path):
     """ 
     Funcion que recibe el directorio donde se encuentra el ZCHAFF y compila
@@ -132,6 +137,8 @@ def compile_zchaff(path):
     os.chdir('./' + path)
     subprocess.run(["make", "all"],capture_output=True)
     os.chdir('../')
+=======
+>>>>>>> 440a59a691b384557a74339f6f2930bb986db5af
 
 if __name__ == "__main__":
     if len(argv) == 1:

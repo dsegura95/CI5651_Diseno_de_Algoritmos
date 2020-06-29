@@ -52,6 +52,8 @@ También se puede ejecutar de la siguiente forma:
 - ```$ python3 sudoku_solver.py FILE_IN FILE_OUT```
 - ```$ python3 sudoku_solver.py FILE_IN```
 
+Tomando como valores predeterminados ```TIME_MAX = 15``` y ```FILE_OUT = Soluciones.txt``` en caso de no ser indicados.
+
 ## Wiki
 
 ### Implementación
