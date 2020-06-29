@@ -61,7 +61,7 @@ Para obtener los detalles de la implementación final, por favor lea el [informe
 
 
 ### Excepciones con ZCHAFF
-El programa ZCHAFF no nos compiló bien, pero sin embargo por magia de la computación pudimos realizar las pruebas corriendo el programa sin problema. Si por alguna razón el programa llegase a tener errores en la ejecución probablemente sea por el ZCHAFF. En tal caso de que hayan problemas, nos lo hacen saber y podemos modificar el programa para quitar el ZCHAFF y al menos puedan ver la corrida de nuestra solución. Las funciones que se encargan de esto en nuestro programa ```sudoku_solver.py``` son: ```compile_zchaff``` y ```zchaff_run```, donde el primero recibe la ubicacion en el que se encuentra el Makefile del programa y el segundo recibe la ubicacion donde se encuentra el ejecutable y el problema a resolver, que por defecto la ubicación que nosotros definimos por defecto es ```./zchaff```.
+El programa ZCHAFF no nos compiló bien, pero sin embargo por magia de la computación pudimos realizar las pruebas corriendo el programa sin problema. Si por alguna razón el programa llegase a tener errores en la ejecución probablemente sea por el ZCHAFF. En tal caso de que hayan problemas, nos lo hacen saber y podemos modificar el programa para quitar el ZCHAFF y al menos puedan ver la corrida de nuestra solución. Las funciones que se encargan de esto en nuestro programa ```sudoku_solver.py``` son: ```compile_zchaff``` y ```zchaff_run```, donde el primero recibe la ubicacion en el que se encuentra el Makefile del programa y el segundo recibe la ubicacion donde se encuentra el ejecutable y el problema a resolver, que por defecto la ubicación que nosotros definimos es ```./zchaff```.
 
 ### Autores
 * *David Segura*.
