@@ -110,17 +110,27 @@ def sudoku_solver(sat: str, t_max: float) -> (float, str,[[int]]):
     else:
         return (0,"Time expired.",[[0]])
 
-def zchaff_run(problem) -> str:
+def zchaff_run(path,problem) -> str:
     """ 
     Funcion que toma el string en formato CNF de una instancia de sudoku y
     lo resuelve con ZCHAFF.
     INPUT:
+        - path:      Ubicacion del programa
         - problem:   String que representa la instancia del sudoku en CNF.
     """
     # Cambiamos de directorio al de zchaff
-    os.chdir('./zchaff')
+    os.chdir('./'+path)
     # Ejecutamos el programa
     subprocess.run(["./zchaff", problem],capture_output=True)
+    os.chdir('../')
+
+def compile_zchaff(path):
+    """ 
+    Funcion que recibe el directorio donde se encuentra el ZCHAFF y compila
+    el programa en cuestion.
+    """
+    os.chdir('./' + path)
+    subprocess.run(["make", "all"],capture_output=True)
     os.chdir('../')
 
 if __name__ == "__main__":
@@ -138,9 +148,8 @@ if __name__ == "__main__":
             t = float("0" + input("Indique el tiempo maximo de ejecucion (enter para cancelar): "))
 
     elif len(argv) >= 2 and len(argv) <= 4:
-        os.chdir('./zchaff')
-        subprocess.run(["make", "all"],capture_output=True)
-        os.chdir('../')
+        path = "zchaff"
+        compile_zchaff(path)
         f = open(argv[1], "r")
         sudokus = f.readlines()
         f.close()
@@ -170,7 +179,7 @@ if __name__ == "__main__":
                 # Obtenemos la representacion en SAT del sudoku.
                 sat = sudoku_to_SAT(sudoku_matrix)
                 time_laura, to_file, solve_matrix = sudoku_solver(sat, t)
-                time_zchaff = timer(zchaff_run, t, sat)
+                time_zchaff = timer(zchaff_run, t, path,sat)
                 f.write(to_file + "\n")
                 print(">>> INSTANCIA ["+ str(instancia)+"]")
                 sudoku_instance = ">>> SUDOKU [" + str(instancia)+"]\n" + print_sudoku(sudoku_matrix)
