@@ -253,7 +253,7 @@ Ya en esta etapa del proyecto el mayor problema está resuelto, solo queda trans
 \end{itemize}
 
 
-\textbf{Memoria Asintótica:} FALTAA
+\textbf{Memoria Asintótica:}
 \begin{itemize}
 	\item \texttt{F\_inv} $\in O(1)$
 	\item \texttt{SAT\_to\_sudoku} $\in O(V)$ siendo $V$ el número de variables del problema.\\
@@ -268,7 +268,7 @@ Ya en esta etapa del proyecto el mayor problema está resuelto, solo queda trans
 En \texttt{sudoku\_solver.py} orquestamos todos los programas que implementamos para un funcionamiento completo. Además requerimos implementar algunas funciones más para poder dar unos resultados mejor elaborados, donde para cada instancia de sudoku resuelta, se le añade el tiempo que tardó nuestra implementación \texttt{laura\_SAT}. Todo esto se reporta mediante el terminal, donde se generará también un archivo .txt con las instancias de los sudokus resuelta. Al final de la ejecución se mostrará un gráfico en comparando nuestro algoritmo con el ZCHAFF. Las funciones que usamos en nuestro programa de salida son:\\
 
 \begin{itemize}
-	\item \texttt{timer}: usamos la librería \textit{multiprocessing} para llevar acabo el multiprocesamiento a través de hilos, donde ejecutamos la función a procesar en un hilo $h_1$ y el otro hilo $h_2$ se encarga de estar activo durante un tiempo limite indicado. Cuando $h_1$ o $h_2$ finalicen, se termina la ejecuci\'on del otro hilo. Recibe la función a ejecutar en $h_1$ y sus argumentos, y el tiempo límite a establecer donde tenemos por defectos que son 10 segundos.
+	\item \texttt{timer}: usamos la librería \textit{multiprocessing} para llevar acabo el multiprocesamiento a través de hilos, donde ejecutamos la función a procesar en un hilo $h_1$ y el otro hilo $h_2$ se encarga de estar activo durante un tiempo limite indicado. Cuando $h_1$ o $h_2$ finalicen, se termina la ejecuci\'on del otro hilo. Recibe la función a ejecutar en $h_1$ y sus argumentos, y el tiempo límite a establecer \textbf{donde tenemos por defecto que son 15 segundos}.
 
 	\item \texttt{get\_solution}: simplemente guadará en una cola el resultado de ejecutar \texttt{laura\_SAT}. Recibe las entradas de \texttt{laura\_SAT} que son las variables y las cláusulas.
 
@@ -292,6 +292,20 @@ En \texttt{sudoku\_solver.py} orquestamos todos los programas que implementamos 
 
 \section{Conclusiones}
 
+Para concluir, realizamos la comparativa de nuestra implementación \texttt{laura\_SAT} contra ZCHAFF, que aunque haya una gran diferencia en cuanto a eficiencia, nos sentimos reconfortados al poder haber llevado acabo una resolución de problema exigente.\\
 
+Los resultados que obtuvimos fueron los siguientes:\\
+
+\includegraphics[scale=0.6]{Figure_1.png}\\
+
+Donde el mayor tiempo que tuvimos fue de aproximadamente 12 segundos en la instancia 27, y en los demas problemas alcanzamos un promedio de 5 segundos de resolución. \\
+
+Cuando se ejecute el programa, a través de la terminal se puede ver en tiempo real como se va resolviendo cada instancia del sudoku con nuestra implementación y a su vez también se observa la de ZCHAFF.\\
+
+\includegraphics[scale=0.6]{Shell_Report.png}\\
+
+En un archivo que por defecto nosotros llamamos \texttt{Soluciones.txt} se tendrán las soluciones en el mismo formato que se le pasó al programa. También creamos otro archivo llamado \texttt{Soluciones\_Matrices.txt} donde estarán los sudokus resuelto en forma matricial.\\
+
+\includegraphics[scale=0.4]{Matrix_Solve.png}\\
 
 \end{document}
