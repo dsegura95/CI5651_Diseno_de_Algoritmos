@@ -5,6 +5,29 @@
 
 from sys import argv
 
+class Clousule:
+  def __init__(self):
+    self.literales = []
+    self. flags = []
+    self.N = 0
+
+  def add(self, var, flag):
+    self.literales.add(var)
+    self.flags.add(flag)
+    self.N += 1
+
+  def delete(self, i):
+    self.literales.pop(i)
+    self.flags.pop(i)
+    self.N -= 1
+
+  def copy(self):
+    C = Clousule
+    C.literales = self.literales.copy()
+    C.flags = self.flags.copy()
+    C.N = self.N
+    return C
+
 def read_SAT(text: str) -> ([int], [[int]]):
   """
   Dado un string con un problema SAT en forma cnf, retorna el arreglo con las
@@ -36,7 +59,7 @@ def read_SAT(text: str) -> ([int], [[int]]):
       # Obtenemos el numero de variables.
       text = text[6:] 
       N = int(text[: text.find(" ")])
-      V = [0 for _ in range(N)]
+      V = [Variable() for _ in range(N)]
 
       # Obtenemos el numero de clausuras.
       text = text[text.find(" ")+1:]
@@ -45,18 +68,25 @@ def read_SAT(text: str) -> ([int], [[int]]):
         raise Exception("Debe haber por lo menos una clausura.")
 
       # Obtenemos las clausuras.
-      C = [[] for _ in range(num_C)]
+      C_aux = [Clousule() for _ in range(num_C)]
+      C = [[]]
       text = text[text.find("\n")+1:]
       nums = [int(t) for t in text.split()]
       # Si el ultimo numero es un 0, lo quitamos.
       if nums[len(nums)-1] == 0: nums.pop()
       i = 0
       for n in nums:
-        if n == 0: i += 1
+        if n == 0:
+          for k in range(0, len(C) - C_aux[i].N - 1):
+            C.append([])
+          C[C_aux[i].N - 1].append(C_aux[i])
         elif abs(n) > N: 
           raise Exception("Se indicaron", N, "variables, pero aparece la variable",
                           n, "en la " + str(i) + "-esima clausura.")
-        else: C[i].append(n)
+        else: 
+          sign = int(abs(n)/n)
+          C_aux[i].add(abs(n), sign)
+          V[abs(n)].add(C_aux[i], sign)
       if i+1 != num_C:
         print(i+1, num_C)
         raise Exception("El numero de clausuras indicadas no coincide con las dadas.")
@@ -138,7 +168,7 @@ def search_amin_zero(V: [int]) -> (int):
             -1 si no hay ningun 0 en el arreglo.
   """
   for i in range(len(V)):
-    if V[i] == 0:
+    if V[i].sign == 0:
       return i
   return -1
 
@@ -153,18 +183,21 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
               contrario
     - bool:   Indica si hubo conflictos.
   """
+  if verify_units(V, C):
+    return [0 for _ in range(len(V))], True
+
   for i in range(2):
     signo = 1-2*i
     # Hacemos una copia para no modificar los originales.
-    V_aux = V.copy()
-    C_aux = [c.copy() for c in C]
+    V_aux = [v.copy() for v in V]
+    C_aux = [[clousule.copy() for clousule in c] for c in C]
     # Verificamos cual es la siguiente variable a la que no se le ha
     # asignado un valor.
     k = search_amin_zero(V_aux) + 1
     # Asignamos primero -1 luego 1 a la (k-1)-esima variable.
-    V_aux[k-1] = signo
+    V_aux[k-1].sign = signo
     # Actualizamos las clausuras debido a la nueva asignacion.
-    if (update_C(V_aux, C_aux, k) or verify_units(V_aux, C_aux)):
+    if update_C(V_aux, C_aux, k):
       # Si dio conflicto con el negativo, no hay solucion en esta rama.
       if signo < 0:
         return [0 for _ in range(len(V))], True
@@ -175,9 +208,9 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
     if len(C_aux) == 0:
       sol = []
       for v in V_aux:
-        if v != 0: sol.append(v)
+        if v.sign != 0: sol.append(v.sign)
         else: sol.append(-1)
-      return sol.copy(), False
+      return sol, False
 
     # Si hay mas clausuras, verificamos si hay alguna solucion en futuras ramas
     sol, conflict = laura_SAT(V_aux, C_aux)
