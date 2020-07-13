@@ -135,19 +135,22 @@ def read_SAT(text: str) -> ([int], [[int]]):
       if nums[len(nums)-1] == 0: nums.pop()
       i = 0
       for n in nums:
+        last = n
         if n == 0:
-          for k in range(0, len(C) - C_aux[i].N - 1):
+          for k in range(0, C_aux[i].N - len(C)):
             C.append([])
           C[C_aux[i].N - 1].append(C_aux[i])
+          i += 1
         elif abs(n) > N: 
           raise Exception("Se indicaron", N, "variables, pero aparece la variable",
                           n, "en la " + str(i) + "-esima clausura.")
         else: 
           sign = int(abs(n)/n)
           C_aux[i].add(abs(n), sign)
-          V[abs(n)].add(C_aux[i], sign)
+          V[abs(n)].add_closure(C_aux[i], sign)
+      if last != 0:
+        C[C_aux[i].N - 1].append(C_aux[i])
       if i+1 != num_C:
-        print(i+1, num_C)
         raise Exception("El numero de clausuras indicadas no coincide con las dadas.")
 
     else:
