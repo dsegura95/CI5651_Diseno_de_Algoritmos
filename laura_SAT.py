@@ -5,6 +5,65 @@
 
 from sys import argv
 
+class Variables:
+  """
+  Clase que representara la estructura de datos de las variables, donde almacenaremos
+  las clausuras a las que pertenece la variable y su signo
+  INIT:
+    - sign:   signo de la variable que comienza sin asignar
+    - closures: arreglo con las clausulas a la que pertenece la variable y el signo
+                que tiene dentro de ella
+  """
+  def __init__(self):
+    self.sign = None
+    self.closures = []
+  
+  def assign(self, sign):
+    """
+    Metodo que asigna el signo a la variable
+    INPUT:
+      - sign: signo de la variable
+    """
+    self.sign = sign
+  
+  def get_assign(self):
+    """
+    Metodo que retorna el signo de la variable
+    OUTPUT:
+      - sign: signo de la variable
+    """
+    return self.sign
+  
+  def add_closure(self, closure, sign):
+    """
+    Metodo que agrega una clausura a la que pertenece la variable y el signo
+    que tiene
+    INPUT:
+      - closure:  clausura a la que pertenece la variable
+      - sign:     signo/s de la variable
+    """
+    self.closures.append((closure, sign))
+  
+  def get_closures(self):
+    """
+    Metodo que obtiene las clausuras a la que pertenece la variable
+    OUTPUT:
+      - closures:   clasuras a las que pertenece la variable
+    """
+    return self.closures
+  
+  def copy(self):
+    """
+    Metodo que obtiene la copia de la clase
+    OUTPUT:
+      - v:   copia de la clausula
+    """
+    v = Variables()
+    v.assign(self.sign)
+    for x in self.closures:
+      v.add_closure(x[0].copy(), x[1].copy())
+    return v
+
 def read_SAT(text: str) -> ([int], [[int]]):
   """
   Dado un string con un problema SAT en forma cnf, retorna el arreglo con las
