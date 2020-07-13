@@ -64,7 +64,7 @@ class Variable:
       v.add_closure(x[0].copy(), x[1].copy())
     return v
 
-class Clousule:
+class Closure:
   def __init__(self):
     self.literales = []
     self. flags = []
@@ -81,7 +81,7 @@ class Clousule:
     self.N -= 1
 
   def copy(self):
-    C = Clousule
+    C = Closure()
     C.literales = self.literales.copy()
     C.flags = self.flags.copy()
     C.N = self.N
@@ -127,7 +127,7 @@ def read_SAT(text: str) -> ([int], [[int]]):
         raise Exception("Debe haber por lo menos una clausura.")
 
       # Obtenemos las clausuras.
-      C_aux = [Clousule() for _ in range(num_C)]
+      C_aux = [Closure() for _ in range(num_C)]
       C = [[]]
       text = text[text.find("\n")+1:]
       nums = [int(t) for t in text.split()]
@@ -252,7 +252,7 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
     signo = 1-2*i
     # Hacemos una copia para no modificar los originales.
     V_aux = [v.copy() for v in V]
-    C_aux = [[clousule.copy() for clousule in c] for c in C]
+    C_aux = [[closure.copy() for closure in c] for c in C]
     # Verificamos cual es la siguiente variable a la que no se le ha
     # asignado un valor.
     k = search_amin_zero(V_aux) + 1
