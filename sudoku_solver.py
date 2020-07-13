@@ -130,7 +130,7 @@ def compile_zchaff(path):
     el programa en cuestion.
     """
     os.chdir('./' + path)
-    subprocess.run(["make", "all"],capture_output=True)
+    subprocess.run(["make", "-f", "Makefile"],capture_output=True)
     os.chdir('../')
 
 if __name__ == "__main__":
