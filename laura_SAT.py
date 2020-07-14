@@ -5,6 +5,56 @@
 
 from sys import argv
 
+class Closure:
+  """
+  Clase que representara la estructura de datos de las clausuras, donde almacenaremos
+  las variables que contiene junto a sus flags y el numero de literales.
+  """
+  def __init__(self):
+    """
+    Se inicializan los siguientes parametros:
+      self.literales = []:    Conjunto de literales que aparecen en la clausura.
+      self.N = 0:      Numero de literales de la clausura.
+    """
+    self.literales = []
+    self.N = 0
+    self.satisfied = False
+
+  def add(self, var: int):
+    """
+    Agrega un literal a la clausura.
+    INPUT:
+      - var:  Entero que representa a la variable que aparece en el literal.
+    """
+    self.literales.append(var)
+    self.N += 1
+
+  def delete(self, indexes: [int]) -> bool:
+    """
+    Elimina el i-esimo literal de la clausura.
+    INPUT:  
+      i:  Indice del literal.
+    OUTPUT:
+      bool:  Indica si la clausula quedo vacia.
+    """
+    p = 0
+    for i in indexes:
+      self.literales.pop(i-p)
+      p += 1
+    self.N -= len(indexes)
+    return self.N == 0
+
+  def copy(self):
+    """
+    Metodo que retorna una copia de la instancia.
+    OUTPUT:
+      - Closure:   copia de la clausula
+    """
+    C = Closure()
+    C.literales = self.literales.copy()
+    C.N = self.N
+    C.satisfied = self.satisfied
+    return C
 
 class Variable:
   """
@@ -41,15 +91,13 @@ class Variable:
     """
     return self.sign
   
-  def add_closure(self, closure: Closure, sign: int):
+  def add_closure(self, closure: Closure):
     """
-    Metodo que agrega una clausura a la que pertenece la variable y el signo
-    que tiene
+    Metodo que agrega una clausura a la que pertenece la variable.
     INPUT:
-      - closure:  clausura a la que pertenece la variable
-      - sign:     signo/s de la variable
+      - closure:  clausura a la que pertenece la variable.
     """
-    self.closures.append((closure, sign))
+    self.closures.append(closure)
   
   def get_closures(self) -> [Closure]:
     """
@@ -59,7 +107,7 @@ class Variable:
     """
     return self.closures
   
-  def copy(self) -> Variable:
+  def copy(self):
     """
     Metodo que retorna una copia de la instancia.
     OUTPUT:
@@ -67,58 +115,7 @@ class Variable:
     """
     v = Variable()
     v.assign(self.sign)
-    for x in self.closures:
-      v.add_closure(x[0].copy(), x[1].copy())
     return v
-
-class Closure:
-  """
-  Clase que representara la estructura de datos de las clausuras, donde almacenaremos
-  las variables que contiene junto a sus flags y el numero de literales.
-  """
-  def __init__(self):
-    """
-    Se inicializan los siguientes parametros:
-      self.literales = []:    Conjunto de variables que aparecen en la clausura.
-      self.flags = []:     Falgs correspondientes a las variables que aparecen en la clausura.
-      self.N = 0:      Numero de literales de la clausura.
-    """
-    self.literales = []
-    self.flags = []
-    self.N = 0
-
-  def add(self, var: Variable, flag: int):
-    """
-    Agrega un literal a la clausura.
-    INPUT:
-      - var:  Variable que aparece en el literal.
-      - flag:   1 -> No negado, -1 -> Negado.
-    """
-    self.literales.append(var)
-    self.flags.append(flag)
-    self.N += 1
-
-  def delete(self, i: int):
-    """
-    Elimina el i-esimo literal de la clausura.
-    INPUT:  
-      i:  Indice del literal.
-    """
-    self.literales.pop(i)
-    self.flags.pop(i)
-    self.N -= 1
-
-  def copy(self) -> Closure:
-    """
-    Metodo que retorna una copia de la instancia.
-    OUTPUT:
-      - Closure:   copia de la clausula
-    """
-    C = Closure()
-    C.literales = self.literales.copy()
-    C.flags = self.flags.copy()
-    C.N = self.N
-    return C
 
 
 def read_SAT(text: str) -> ([int], [[int]]):
@@ -179,9 +176,8 @@ def read_SAT(text: str) -> ([int], [[int]]):
           raise Exception("Se indicaron", N, "variables, pero aparece la variable",
                           n, "en la " + str(i) + "-esima clausura.")
         else: 
-          sign = int(abs(n)/n)
-          C_aux[i].add(abs(n), sign)
-          V[abs(n)].add_closure(C_aux[i], sign)
+          C_aux[i].add(n)
+          V[abs(n)-1].add_closure(C_aux[i])
       if last != 0:
         C[C_aux[i].N - 1].append(C_aux[i])
       if i+1 != num_C:
@@ -190,14 +186,15 @@ def read_SAT(text: str) -> ([int], [[int]]):
     else:
       raise Exception("Formato no valido, el metadato debe ser 'c' para comentarios y " + \
                       "'p' para el encabezado.")
+
   return V, C 
 
-def update_C(V: [int], C: [[int]], k: int) -> bool:
+def update_C(V: [Variable], C: [[Closure]], k: int) -> bool:
   """ 
   Actualiza las clausuras de C dada la (k-1)-esima variable de V. Si aparece
   un literal de la variable con valor False, se elimina dicho literal, en caso
   contrario se elimina toda la clausula. En caso de quedar alguna clausura vacia,
-  significa que dio False (conflict).
+  significa que dio False (conflake).
   INPUT:
     - V:  Variables.
     - C:  Clausuras.
@@ -205,20 +202,41 @@ def update_C(V: [int], C: [[int]], k: int) -> bool:
   OUTPUT:
     - bool: Indica si hubo algun conflicto (clausura vacia).
   """
-  j = 0
-  for i in range(len(C)):
-    p = i-j
-    # Si el literal se encuentra con valor True, eliminamos la clausura.
-    if V[k-1]*k in C[p]:
-      C.pop(p)
-      j += 1
-    # Si el literal se encuentra con valor False, se elimina el literal.
-    elif -V[k-1]*k in C[p]:
-      C[p].pop(C[p].index(-V[k-1]*k))
-      # Si la clausura queda vacia, conflicto.
-      if not C[p]:
-        return True
+  c = V[k-1].closures
+  for i in range(len(c)):
+    if c[i].satisfied: continue
+
+    pos = c[i].N - 1
+    for j in range(len(C[pos])):
+        if C[pos][j] == c[i]: 
+          index = j
+          closure = C[pos][j]
+          break
+
+    delete = []
+    for p, l in enumerate(c[i].literales):
+      if k*V[k-1].sign == l:
+        c[i].satisfied = True
+        C[pos].pop(index)
+        return False
+
+      elif l == -k*V[k-1].sign:
+        delete.append(p)
+
+    if delete:
+      if c[i].delete(delete): return True
+      try:
+        C[pos].pop(index)
+      except:
+        o = any(any(C[u][v] == c[i] for v in range(len(C[u]))) for u in range(len(C)))
+        for u in range(len(C)):
+          for v in range(len(C[u])):
+            if C[u][v] == c[i]: o = (u, v, c[i].N)
+        raise Exception(str(o))
+      C[c[i].N - 1].append(c[i])
+  
   return False
+
 
 def verify_units(V: [int], C: [[int]]) -> bool:
   """ 
@@ -232,11 +250,11 @@ def verify_units(V: [int], C: [[int]]) -> bool:
             True y False, o alguna clausura vacia).
   """
   while len(C[0]) > 0:
-    c = C[0][0]
-    i = c.literales[0]
-    sign = c.flags[0]
-    C[0].pop(0)
-    if V[i].assign(c.flags[0]) or update_C(V, C, i): return True
+    c = C[0].pop()
+    c.satisfied = True
+    k = abs(c.literales[0])
+    sign = abs(c.literales[0])/c.literales[0]
+    if V[k-1].assign(sign) or update_C(V, C, k): return True
   return False
 
 def search_amin_zero(V: [int]) -> (int):
@@ -269,7 +287,7 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
     return [0 for _ in range(len(V))], True
 
   for i in range(2):
-    signo = 1-2*i
+    sign = 1-2*i
     # Hacemos una copia para no modificar los originales.
     V_aux = [v.copy() for v in V]
     C_aux = [[closure.copy() for closure in c] for c in C]
@@ -277,17 +295,17 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
     # asignado un valor.
     k = search_amin_zero(V_aux) + 1
     # Asignamos primero -1 luego 1 a la (k-1)-esima variable.
-    V_aux[k-1].sign = signo
+    V_aux[k-1].sign = sign
     # Actualizamos las clausuras debido a la nueva asignacion.
     if update_C(V_aux, C_aux, k):
       # Si dio conflicto con el negativo, no hay solucion en esta rama.
-      if signo < 0:
+      if sign < 0:
         return [0 for _ in range(len(V))], True
       # Si dio conflicto con el positivo, pasamos al negativo
       continue
 
     # Si no hubo conflictos y no hay mas clausuras, retornamos las variables.
-    if len(C_aux) == 0:
+    if all(len(c) == 0 for c in C_aux):
       sol = []
       for v in V_aux:
         if v.sign != 0: sol.append(v.sign)
@@ -295,9 +313,9 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
       return sol, False
 
     # Si hay mas clausuras, verificamos si hay alguna solucion en futuras ramas
-    sol, conflict = laura_SAT(V_aux, C_aux)
+    sol, conflake = laura_SAT(V_aux, C_aux)
     # Si una de las ramas logro retornar el resultado, retornamos dicho resultado
-    if not conflict:
+    if not conflake:
       return sol, False
 
   # Si no hubo un resultado en futuras ramas, conflicto.
@@ -331,8 +349,8 @@ if __name__ == "__main__":
         sat = input_sat()
         while sat != "p cnf  \n":
           V, C = read_SAT(sat)
-          V_result, conflict = laura_SAT(V, C)
-          print("\n" + output(V_result, int(not conflict)) + "\n")
+          V_result, conflake = laura_SAT(V, C)
+          print("\n" + output(V_result, int(not conflake)) + "\n")
           sat = input_sat()
 
     elif len(argv) == 2:
@@ -342,7 +360,7 @@ if __name__ == "__main__":
         f.close()
 
         V, C = read_SAT(sat)
-        V_result, conflict = laura_SAT(V, C)
-        print("\n" + output(V_result, int(not conflict)) + "\n")
+        V_result, conflake = laura_SAT(V, C)
+        print("\n" + output(V_result, int(not conflake)) + "\n")
     else:
         raise Exception("Numero de argumentos invalidos.")
