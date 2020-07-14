@@ -19,6 +19,7 @@ class Closure:
     self.literales = []
     self.N = 0
     self.satisfied = False
+    self.cloud = {}
 
   def add(self, var: int):
     """
@@ -44,17 +45,19 @@ class Closure:
     self.N -= len(indexes)
     return self.N == 0
 
-  def copy(self):
+  def save(self, key):
     """
     Metodo que retorna una copia de la instancia.
     OUTPUT:
       - Closure:   copia de la clausula
     """
-    C = Closure()
-    C.literales = self.literales.copy()
-    C.N = self.N
-    C.satisfied = self.satisfied
-    return C
+    self.cloud[key] = (self.literales.copy(), self.N, self.satisfied)
+
+  def restaure(self, key):
+    self.literales, self.N, self.satisfied = self.cloud[key]
+
+  def del_key(self, key):
+    self.cloud.pop(key)
 
 class Variable:
   """
@@ -70,6 +73,7 @@ class Variable:
     """
     self.sign = 0
     self.closures = []
+    self.cloud = {}
   
   def assign(self, sign: int) -> bool:
     """
@@ -107,15 +111,19 @@ class Variable:
     """
     return self.closures
   
-  def copy(self):
+  def save(self, key):
     """
     Metodo que retorna una copia de la instancia.
     OUTPUT:
       - Variable:   copia de la variable.
     """
-    v = Variable()
-    v.assign(self.sign)
-    return v
+    self.cloud[key] = self.sign
+
+  def restaure(self, key):
+    self.sign = self.cloud[key]
+
+  def del_key(self, key):
+    self.cloud.pop(key)
 
 
 def read_SAT(text: str) -> ([int], [[int]]):
@@ -208,31 +216,25 @@ def update_C(V: [Variable], C: [[Closure]], k: int) -> bool:
 
     pos = c[i].N - 1
     for j in range(len(C[pos])):
-        if C[pos][j] == c[i]: 
-          index = j
-          closure = C[pos][j]
-          break
+      if C[pos][j] == c[i]: 
+        index = j
+        break
 
     delete = []
+    satisfied = False
     for p, l in enumerate(c[i].literales):
       if k*V[k-1].sign == l:
         c[i].satisfied = True
         C[pos].pop(index)
-        return False
+        satisfied = True
+        break
 
       elif l == -k*V[k-1].sign:
         delete.append(p)
 
-    if delete:
+    if delete and not satisfied:
       if c[i].delete(delete): return True
-      try:
-        C[pos].pop(index)
-      except:
-        o = any(any(C[u][v] == c[i] for v in range(len(C[u]))) for u in range(len(C)))
-        for u in range(len(C)):
-          for v in range(len(C[u])):
-            if C[u][v] == c[i]: o = (u, v, c[i].N)
-        raise Exception(str(o))
+      C[pos].pop(index)
       C[c[i].N - 1].append(c[i])
   
   return False
@@ -270,7 +272,7 @@ def search_amin_zero(V: [int]) -> (int):
   for i in range(len(V)):
     if V[i].sign == 0:
       return i
-  return -1
+  raise Exception("Todas las variables ya fueron asignadas.")
 
 def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
   """ 
@@ -286,39 +288,76 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
   if verify_units(V, C):
     return [0 for _ in range(len(V))], True
 
+  if all(len(c) == 0 for c in C):
+    sol = []
+    for v in V:
+      if v.sign != 0: sol.append(v.sign)
+      else: sol.append(-1)
+    return sol, False
+
+  key = 0
+  while key in V[0].cloud: key += 1
+
+  for c in C:
+    for c_p in c: c_p.save(key)
+  C_save = [c.copy() for c in C]
+  for v in V: v.save(key)
+
+  print([v.sign for v in V])
+  print([[cp.literales for cp in c] for c in C], "\n")
+
   for i in range(2):
     sign = 1-2*i
     # Hacemos una copia para no modificar los originales.
-    V_aux = [v.copy() for v in V]
-    C_aux = [[closure.copy() for closure in c] for c in C]
     # Verificamos cual es la siguiente variable a la que no se le ha
     # asignado un valor.
-    k = search_amin_zero(V_aux) + 1
+    k = search_amin_zero(V) + 1
     # Asignamos primero -1 luego 1 a la (k-1)-esima variable.
-    V_aux[k-1].sign = sign
+    V[k-1].sign = sign
     # Actualizamos las clausuras debido a la nueva asignacion.
-    if update_C(V_aux, C_aux, k):
+    if update_C(V, C, k):
+      C = [c.copy() for c in C_save]
+      for c in C:
+        for c_p in c:
+          c_p.restaure(key)
+      for v in V: v.restaure(key)
+      
       # Si dio conflicto con el negativo, no hay solucion en esta rama.
       if sign < 0:
+        for c in C:
+          for c_p in c:
+            c_p.del_key(key)
+        for v in V: v.del_key(key)
         return [0 for _ in range(len(V))], True
       # Si dio conflicto con el positivo, pasamos al negativo
       continue
 
     # Si no hubo conflictos y no hay mas clausuras, retornamos las variables.
-    if all(len(c) == 0 for c in C_aux):
+    if all(len(c) == 0 for c in C):
       sol = []
-      for v in V_aux:
+      for v in V:
         if v.sign != 0: sol.append(v.sign)
         else: sol.append(-1)
       return sol, False
 
     # Si hay mas clausuras, verificamos si hay alguna solucion en futuras ramas
-    sol, conflake = laura_SAT(V_aux, C_aux)
+    sol, conflake = laura_SAT(V, C)
     # Si una de las ramas logro retornar el resultado, retornamos dicho resultado
     if not conflake:
       return sol, False
 
+    C = [c.copy() for c in C_save]
+    for c in C:
+      for c_p in c:
+        c_p.restaure(key)
+    for v in V: v.restaure(key)
+
+
   # Si no hubo un resultado en futuras ramas, conflicto.
+  for c in C:
+    for c_p in c:
+      c_p.del_key(key)
+  for v in V: v.del_key(key)
   return [0 for _ in range(len(V))], True
 
 def output(V: [int], result: int) -> str:
