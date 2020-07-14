@@ -53,11 +53,9 @@ class Closure:
     """
     self.cloud[key] = (self.literales.copy(), self.N, self.satisfied)
 
-  def restaure(self, key):
+  def restaure(self, key, pop= False):
     self.literales, self.N, self.satisfied = self.cloud[key]
-
-  def del_key(self, key):
-    self.cloud.pop(key)
+    if pop: self.cloud.pop(key)
 
 class Variable:
   """
@@ -119,11 +117,9 @@ class Variable:
     """
     self.cloud[key] = self.sign
 
-  def restaure(self, key):
+  def restaure(self, key, pop=False):
     self.sign = self.cloud[key]
-
-  def del_key(self, key):
-    self.cloud.pop(key)
+    if pop: self.cloud.pop(key)
 
 
 def read_SAT(text: str) -> ([int], [[int]]):
@@ -310,20 +306,21 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
     V[k-1].sign = sign
     # Actualizamos las clausuras debido a la nueva asignacion.
     if update_C(V, C, k):
-      C = [c.copy() for c in C_save]
-      for c in C:
-        for c_p in c:
-          c_p.restaure(key)
-      for v in V: v.restaure(key)
       
       # Si dio conflicto con el negativo, no hay solucion en esta rama.
       if sign < 0:
         for c in C:
           for c_p in c:
-            c_p.del_key(key)
-        for v in V: v.del_key(key)
+            c_p.restaure(key, pop = True)
+        for v in V: v.restaure(key, pop = True)
         return [0 for _ in range(len(V))], True
+
       # Si dio conflicto con el positivo, pasamos al negativo
+      C = [c.copy() for c in C_save]
+      for c in C:
+        for c_p in c:
+          c_p.restaure(key)
+      for v in V: v.restaure(key)
       continue
 
     # Si no hubo conflictos y no hay mas clausuras, retornamos las variables.
@@ -340,18 +337,20 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
     if not conflake:
       return sol, False
 
-    C = [c.copy() for c in C_save]
-    for c in C:
-      for c_p in c:
-        c_p.restaure(key)
-    for v in V: v.restaure(key)
+    if sign > 0:
+      C = [c.copy() for c in C_save]
+      for c in C:
+        for c_p in c:
+          c_p.restaure(key)
+      for v in V: v.restaure(key)
+    else:
+      for c in C:
+        for c_p in c:
+          c_p.restaure(key, pop = True)
+      for v in V: v.restaure(key, pop = True) #del_key
 
 
   # Si no hubo un resultado en futuras ramas, conflicto.
-  for c in C:
-    for c_p in c:
-      c_p.del_key(key)
-  for v in V: v.del_key(key)
   return [0 for _ in range(len(V))], True
 
 def output(V: [int], result: int) -> str:
