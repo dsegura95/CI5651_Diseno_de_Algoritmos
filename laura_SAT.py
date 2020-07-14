@@ -5,6 +5,7 @@
 
 from sys import argv
 
+
 class Variable:
   """
   Clase que representara la estructura de datos de las variables, donde almacenaremos
@@ -15,7 +16,7 @@ class Variable:
                 que tiene dentro de ella
   """
   def __init__(self):
-    self.sign = None
+    self.sign = 0
     self.closures = []
   
   def assign(self, sign):
@@ -24,7 +25,9 @@ class Variable:
     INPUT:
       - sign: signo de la variable
     """
+    if self.sign == -sign: return True
     self.sign = sign
+    return False
   
   def get_assign(self):
     """
@@ -64,10 +67,11 @@ class Variable:
       v.add_closure(x[0].copy(), x[1].copy())
     return v
 
+
 class Closure:
   def __init__(self):
     self.literales = []
-    self. flags = []
+    self.flags = []
     self.N = 0
 
   def add(self, var, flag):
@@ -86,6 +90,7 @@ class Closure:
     C.flags = self.flags.copy()
     C.N = self.N
     return C
+
 
 def read_SAT(text: str) -> ([int], [[int]]):
   """
@@ -197,26 +202,12 @@ def verify_units(V: [int], C: [[int]]) -> bool:
     - bool: Indica si hubo algun conflicto (variable que deba tener el valor
             True y False, o alguna clausura vacia).
   """
-  # Indica si hubo clausuras unitarias.
-  units = True
-  while units:
-    units = False
-    # Almacenamos los indices de las clausuras unitarias.
-    v_units = []
-    for i in range(len(C)):
-      if len(C[i]) == 1:
-        # Si el valor de la variable de la clausura unitaria es el negado del
-        # valor que le ibamos a signar, conflicto.
-        if V[abs(C[i][0])-1] == int(-C[i][0]/abs(C[i][0])):
-          return True
-        v_units.append(abs(C[i][0]))
-        V[abs(C[i][0])-1] = int(C[i][0]/abs(C[i][0]))
-        units = True
-    
-    for k in v_units:
-      # Si update_C da conflicto, conflicto.
-      if update_C(V, C, k):
-        return True
+  while len(C[0]) > 0:
+    c = C[0][0]
+    i = c.literales[0]
+    sign = c.flags[0]
+    C[0].pop(0)
+    if V[i].assign(c.flags[0]) or update_C(V, C, i): return True
   return False
 
 def search_amin_zero(V: [int]) -> (int):
