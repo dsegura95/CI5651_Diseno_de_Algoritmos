@@ -215,10 +215,7 @@ def update_C(V: [Variable], C: [[Closure]], k: int) -> bool:
     if c[i].satisfied: continue
 
     pos = c[i].N - 1
-    for j in range(len(C[pos])):
-      if C[pos][j] == c[i]: 
-        index = j
-        break
+    index = C[pos].index(c[i])
 
     delete = []
     satisfied = False
@@ -255,7 +252,7 @@ def verify_units(V: [int], C: [[int]]) -> bool:
     c = C[0].pop()
     c.satisfied = True
     k = abs(c.literales[0])
-    sign = abs(c.literales[0])/c.literales[0]
+    sign = int(abs(c.literales[0])/c.literales[0])
     if V[k-1].assign(sign) or update_C(V, C, k): return True
   return False
 
@@ -302,9 +299,6 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
     for c_p in c: c_p.save(key)
   C_save = [c.copy() for c in C]
   for v in V: v.save(key)
-
-  print([v.sign for v in V])
-  print([[cp.literales for cp in c] for c in C], "\n")
 
   for i in range(2):
     sign = 1-2*i
