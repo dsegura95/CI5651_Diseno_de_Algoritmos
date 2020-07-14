@@ -9,35 +9,39 @@ from sys import argv
 class Variable:
   """
   Clase que representara la estructura de datos de las variables, donde almacenaremos
-  las clausuras a las que pertenece la variable y su signo
-  INIT:
-    - sign:   signo de la variable que comienza sin asignar
-    - closures: arreglo con las clausulas a la que pertenece la variable y el signo
-                que tiene dentro de ella
+  las clausuras a las que pertenece la variable y su signo.
   """
   def __init__(self):
+    """
+    Se inicializan los siguientes parametros:
+      self.sign = 0:    Signo de la variable que comienza sin asignar
+      self.closures = []:     Arreglo con las clausulas a la que pertenece la variable y 
+                              el signo que tiene dentro de ella
+    """
     self.sign = 0
     self.closures = []
   
-  def assign(self, sign):
+  def assign(self, sign: int) -> bool:
     """
-    Metodo que asigna el signo a la variable
+    Metodo que asigna el signo a la variable.
     INPUT:
-      - sign: signo de la variable
+      - sign: signo de la variable.
+    OUTPUT:
+      - bool: Indica si hubo un conflicto.
     """
     if self.sign == -sign: return True
     self.sign = sign
     return False
   
-  def get_assign(self):
+  def get_assign(self) -> int:
     """
     Metodo que retorna el signo de la variable
     OUTPUT:
-      - sign: signo de la variable
+      - int: signo de la variable: (1 -> True, -1 -> False, 0 -> unassigned)
     """
     return self.sign
   
-  def add_closure(self, closure, sign):
+  def add_closure(self, closure: Closure, sign: int):
     """
     Metodo que agrega una clausura a la que pertenece la variable y el signo
     que tiene
@@ -47,7 +51,7 @@ class Variable:
     """
     self.closures.append((closure, sign))
   
-  def get_closures(self):
+  def get_closures(self) -> [Closure]:
     """
     Metodo que obtiene las clausuras a la que pertenece la variable
     OUTPUT:
@@ -55,11 +59,11 @@ class Variable:
     """
     return self.closures
   
-  def copy(self):
+  def copy(self) -> Variable:
     """
-    Metodo que obtiene la copia de la clase
+    Metodo que retorna una copia de la instancia.
     OUTPUT:
-      - v:   copia de la clausula
+      - Variable:   copia de la variable.
     """
     v = Variable()
     v.assign(self.sign)
@@ -67,24 +71,49 @@ class Variable:
       v.add_closure(x[0].copy(), x[1].copy())
     return v
 
-
 class Closure:
+  """
+  Clase que representara la estructura de datos de las clausuras, donde almacenaremos
+  las variables que contiene junto a sus flags y el numero de literales.
+  """
   def __init__(self):
+    """
+    Se inicializan los siguientes parametros:
+      self.literales = []:    Conjunto de variables que aparecen en la clausura.
+      self.flags = []:     Falgs correspondientes a las variables que aparecen en la clausura.
+      self.N = 0:      Numero de literales de la clausura.
+    """
     self.literales = []
     self.flags = []
     self.N = 0
 
-  def add(self, var, flag):
+  def add(self, var: Variable, flag: int):
+    """
+    Agrega un literal a la clausura.
+    INPUT:
+      - var:  Variable que aparece en el literal.
+      - flag:   1 -> No negado, -1 -> Negado.
+    """
     self.literales.append(var)
     self.flags.append(flag)
     self.N += 1
 
-  def delete(self, i):
+  def delete(self, i: int):
+    """
+    Elimina el i-esimo literal de la clausura.
+    INPUT:  
+      i:  Indice del literal.
+    """
     self.literales.pop(i)
     self.flags.pop(i)
     self.N -= 1
 
-  def copy(self):
+  def copy(self) -> Closure:
+    """
+    Metodo que retorna una copia de la instancia.
+    OUTPUT:
+      - Closure:   copia de la clausula
+    """
     C = Closure()
     C.literales = self.literales.copy()
     C.flags = self.flags.copy()
