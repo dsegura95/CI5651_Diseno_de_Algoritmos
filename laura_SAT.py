@@ -13,8 +13,10 @@ class Closure:
   def __init__(self):
     """
     Se inicializan los siguientes parametros:
-      self.literales = []:    Conjunto de literales que aparecen en la clausura.
-      self.N = 0:      Numero de literales de la clausura.
+      self.literales:    Conjunto de literales que aparecen en la clausura.
+      self.N:            Numero de literales de la clausura.
+      self.satisfied:    Variable booleana que indica si una clausula ya fue satisfecha
+      self.cloud:        Diccionario que utilizaremos como nube para guardar la instancia
     """
     self.literales = []
     self.N = 0
@@ -45,15 +47,22 @@ class Closure:
     self.N -= len(indexes)
     return self.N == 0
 
-  def save(self, key):
+  def save(self, key: int):
     """
-    Metodo que retorna una copia de la instancia.
-    OUTPUT:
-      - Closure:   copia de la clausula
+    Metodo que guarda una copia de la instancia.
+    INPUT:
+      - key: llave donde se guardara la copia de la clausula
     """
     self.cloud[key] = (self.literales.copy(), self.N, self.satisfied)
 
-  def restaure(self, key, pop= False):
+  def restaure(self, key: int,  pop=False):
+    """
+    Metodo que restaurara una copia guardada mediante la llave indicada.
+    INPUT:
+      - key: llave donde se encuentra la copia de la clausula
+      - pop: variable que indica si se requiere eliminar la copia o no, por
+             defecto es False.
+    """
     self.literales, self.N, self.satisfied = self.cloud[key]
     if pop: self.cloud.pop(key)
 
@@ -65,9 +74,11 @@ class Variable:
   def __init__(self):
     """
     Se inicializan los siguientes parametros:
-      self.sign = 0:    Signo de la variable que comienza sin asignar
-      self.closures = []:     Arreglo con las clausulas a la que pertenece la variable y 
-                              el signo que tiene dentro de ella
+      self.sign:         Signo de la variable que comienza sin asignar
+      self.closures:     Arreglo con las clausulas a la que pertenece la variable y 
+                         el signo que tiene dentro de ella
+      self.cloud:        Diccionario que utilizaremos como nube para guardar el signo
+                         de la variable
     """
     self.sign = 0
     self.closures = []
@@ -85,14 +96,6 @@ class Variable:
     self.sign = sign
     return False
   
-  def get_assign(self) -> int:
-    """
-    Metodo que retorna el signo de la variable
-    OUTPUT:
-      - int: signo de la variable: (1 -> True, -1 -> False, 0 -> unassigned)
-    """
-    return self.sign
-  
   def add_closure(self, closure: Closure):
     """
     Metodo que agrega una clausura a la que pertenece la variable.
@@ -101,28 +104,27 @@ class Variable:
     """
     self.closures.append(closure)
   
-  def get_closures(self) -> [Closure]:
+  def save(self, key: int):
     """
-    Metodo que obtiene las clausuras a la que pertenece la variable
-    OUTPUT:
-      - closures:   clasuras a las que pertenece la variable
-    """
-    return self.closures
-  
-  def save(self, key):
-    """
-    Metodo que retorna una copia de la instancia.
-    OUTPUT:
-      - Variable:   copia de la variable.
+    Metodo que guarda una copia del signo
+    INPUT:
+      - key: llave donde se guardara la copia del signo
     """
     self.cloud[key] = self.sign
 
-  def restaure(self, key, pop=False):
+  def restaure(self, key: int, pop=False):
+    """
+    Metodo que restablecera una copia guardada mediante la llave indicada.
+    INPUT:
+      - key: llave donde se encuentra la copia del signo
+      - pop: variable que indica si se requiere eliminar la copia o no, por
+             defecto es False.
+    """
     self.sign = self.cloud[key]
     if pop: self.cloud.pop(key)
 
 
-def read_SAT(text: str) -> ([int], [[int]]):
+def read_SAT(text: str) -> ([Variable], [[Closure]]):
   """
   Dado un string con un problema SAT en forma cnf, retorna el arreglo con las
   variables y otro arreglo con las clausuras.
@@ -232,8 +234,23 @@ def update_C(V: [Variable], C: [[Closure]], k: int) -> bool:
   
   return False
 
+def restaure(V: [Variable], C: [[Closure]], key: int, pop=False):
+  """
+    Funcion que restablece los valores guardados en la 'nube' tanto de las  
+    clausulas como del signo de las variables
+    INPUT:
+      - V:   signos de variables a restablecer
+      - C:   clausulas a restablecer
+      - key: llave donde se encuentran guardados los datos a restablecer
+      - pop: variable que indica si se requiere eliminar la copia o no, por
+             defecto es False.
+    """
+  for c in C:
+    for c_p in c:
+      c_p.restaure(key, pop)
+  for v in V: v.restaure(key, pop)
 
-def verify_units(V: [int], C: [[int]]) -> bool:
+def verify_units(V: [Variable], C: [[Closure]]) -> bool:
   """ 
   Verifica si hay clausuras unitarias y actualizas las variables en
   consecuencia.
@@ -252,22 +269,21 @@ def verify_units(V: [int], C: [[int]]) -> bool:
     if V[k-1].assign(sign) or update_C(V, C, k): return True
   return False
 
-def search_amin_zero(V: [int]) -> (int):
+def search_amin_zero(V: [Variable]) -> (int):
   """ 
   Dado un arreglo de enteros, retornara la primera posicion donde
   haya un cero.
   INPUT:
     - V:  Arreglo
   OUTPUT:
-    - int:  Indice tal que en esa posicion se encuentre un 0. Retorna
-            -1 si no hay ningun 0 en el arreglo.
+    - int:  Indice tal que en esa posicion se encuentre un 0.
   """
   for i in range(len(V)):
     if V[i].sign == 0:
       return i
   raise Exception("Todas las variables ya fueron asignadas.")
 
-def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
+def laura_SAT(V: [Variable], C: [[Closure]]) -> ([int], bool):
   """ 
   SAT-Solver
   INPUT:
@@ -309,18 +325,12 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
       
       # Si dio conflicto con el negativo, no hay solucion en esta rama.
       if sign < 0:
-        for c in C:
-          for c_p in c:
-            c_p.restaure(key, pop = True)
-        for v in V: v.restaure(key, pop = True)
+        #restaure(V, C, key, True)
         return [0 for _ in range(len(V))], True
 
       # Si dio conflicto con el positivo, pasamos al negativo
       C = [c.copy() for c in C_save]
-      for c in C:
-        for c_p in c:
-          c_p.restaure(key)
-      for v in V: v.restaure(key)
+      restaure(V, C, key)
       continue
 
     # Si no hubo conflictos y no hay mas clausuras, retornamos las variables.
@@ -339,15 +349,8 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
 
     if sign > 0:
       C = [c.copy() for c in C_save]
-      for c in C:
-        for c_p in c:
-          c_p.restaure(key)
-      for v in V: v.restaure(key)
-    else:
-      for c in C:
-        for c_p in c:
-          c_p.restaure(key, pop = True)
-      for v in V: v.restaure(key, pop = True) #del_key
+      restaure(V, C, key)
+    #else: restaure(V, C, key, True) #del_key
 
 
   # Si no hubo un resultado en futuras ramas, conflicto.

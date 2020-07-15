@@ -33,8 +33,6 @@
 // of the possibility of those damages.
 // ********************************************************************/
 
-#include <cstdlib>
-
 #include <iostream>
 #include <vector>
 #include <set>
@@ -323,7 +321,7 @@ bool CDatabase::enlarge_lit_pool(void) {
   _lit_pool_end_storage = _lit_pool_start + new_size;
 
   // update all the pointers
-  int displacement = _lit_pool_start - old_start;
+  long long displacement = _lit_pool_start - old_start;
   for (i = 0; i < clauses()->size(); ++i) {
     if (clause(i).status() != DELETED_CL)
       clause(i).first_lit() += displacement;

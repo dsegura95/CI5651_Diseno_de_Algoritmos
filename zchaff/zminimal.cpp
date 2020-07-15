@@ -37,9 +37,10 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstdio>
-#include <cstring>
 #include <set>
 #include <vector>
+
+#include <string.h>
 
 using namespace std;
 
@@ -174,7 +175,7 @@ int get_num_clause(char * filename) {
 }
 
 void handle_result(SAT_Manager mng, int outcome, char * filename) {
-  string result = "UNKNOWN";
+  char * result = "UNKNOWN";
   switch (outcome) {
     case SATISFIABLE:
       cout << "Instance satisfiable" << endl;

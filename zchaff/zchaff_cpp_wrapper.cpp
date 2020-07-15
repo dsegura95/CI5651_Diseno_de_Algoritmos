@@ -58,7 +58,7 @@ using namespace std;
   return (SAT_Manager)solver;
 }
 
- const char * SAT_Version(SAT_Manager mng) {
+ char * SAT_Version(SAT_Manager mng) {
   CSolver * solver = (CSolver*) mng;
   return solver->version();
 }

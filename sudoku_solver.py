@@ -147,9 +147,15 @@ if __name__ == "__main__":
             sudoku = input("Escriba la instancia del sudoku (enter para cancelar): ")
             t = float("0" + input("Indique el tiempo maximo de ejecucion (enter para cancelar): "))
 
-    elif len(argv) >= 2 and len(argv) <= 4:
+    elif len(argv) >= 2 and len(argv) <= 5:
+        zchaff = False
+        for i in range(len(argv)):
+            if argv[i] == "--zchaff":
+                zchaff = True
+                argv.pop(i)
+                break
         path = "zchaff"
-        compile_zchaff(path)
+        if zchaff: compile_zchaff(path)
         f = open(argv[1], "r")
         sudokus = f.readlines()
         f.close()
@@ -162,15 +168,15 @@ if __name__ == "__main__":
                 f = open("Soluciones.txt", "w")
             except:
                 f = open(argv[2], "w")
-                t = 15
+                t = 5
         elif len(argv) == 2:
             f = open("Soluciones.txt", "w")
-            t = 15
+            t = 5
         g = open("Soluciones_Matrices.txt","w")
         instancia = 1
         laura_times = [[],[]]
         laura_fails = [[],[]]
-        zchaff_times = [[],[]]
+        if zchaff: zchaff_times = [[],[]]
         for s in sudokus:
             # Verificamos que no sean un salto de linea.
             if len(s) > 2:
@@ -179,7 +185,7 @@ if __name__ == "__main__":
                 # Obtenemos la representacion en SAT del sudoku.
                 sat = sudoku_to_SAT(sudoku_matrix)
                 time_laura, to_file, solve_matrix = sudoku_solver(sat, t)
-                time_zchaff = timer(zchaff_run, t, path,sat)
+                if zchaff: time_zchaff = timer(zchaff_run, t, path,sat)
                 f.write(to_file + "\n")
                 print(">>> INSTANCIA ["+ str(instancia)+"]")
                 sudoku_instance = ">>> SUDOKU [" + str(instancia)+"]\n" + print_sudoku(sudoku_matrix)
@@ -194,17 +200,22 @@ if __name__ == "__main__":
                     g.write("Solucion: " + to_file + "\n")
                     laura_fails[0].append(instancia)
                     laura_fails[1].append(t)
-                print("\tZCHAFF time: " + str(time_zchaff))
-                zchaff_times[0].append(instancia)
-                zchaff_times[1].append(time_zchaff)
+                if zchaff:
+                    print("\tZCHAFF time: " + str(time_zchaff))
+                    zchaff_times[0].append(instancia)
+                    zchaff_times[1].append(time_zchaff)
                 instancia += 1
         # Plotting
+        suma = 0
+        for x in laura_times[1]:
+            suma += x
+        print("PROMEDIO TOTAL: ",suma/len(laura_times[1]))
         plt.ylabel("Segundos")
         plt.xlabel("Instancias")
         plt.suptitle('ZCHAFF vs LAURA_SAT')
         plt.plot(laura_times[0], laura_times[1], 'bo' ,label='laura_SAT')
         plt.plot(laura_fails[0],laura_fails[1] , 'ro', label='laura_SAT expired' )
-        plt.plot(zchaff_times[0], zchaff_times[1], 'go',label='ZCHAFF')
+        if zchaff: plt.plot(zchaff_times[0], zchaff_times[1], 'go',label='ZCHAFF')
         plt.legend()
         plt.yscale('log')
         plt.show()

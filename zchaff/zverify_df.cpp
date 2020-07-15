@@ -33,8 +33,6 @@
 // of the possibility of those damages.
 // *********************************************************************
 
-#include <cstdlib>
-#include <cstring>
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <vector>
@@ -42,6 +40,9 @@
 #include <iostream>
 #include <fstream>
 #include <assert.h>
+
+#include <unistd.h>
+#include <string.h>
 
 using namespace std;
 
@@ -180,7 +181,7 @@ struct cmp_var_level {
       return true;
     else if (v1->level < v2->level)
       return false;
-    else if ( (int)v1 > (int)v2)
+    else if (v1 > v2)
       return true;
     return false;
   }
@@ -574,9 +575,8 @@ bool CDatabase::real_verify(void) {
     int cl_id = _variables[i].antecedent;
     if (_variables[i].value != UNKNOWN &&  cl_id != -1) {
       if (_clauses[cl_id].is_involved) {
-           recursive_find_level(i);
-//         int level = recursive_find_level(i);
-//         cout << "Var: " << i << " level " << level << endl;
+        int level = recursive_find_level(i);
+        // cout << "Var: " << i << " level " << level << endl;
       }
     }
   }

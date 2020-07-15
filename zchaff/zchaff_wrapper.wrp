@@ -58,7 +58,7 @@ EXTERN SAT_Manager SAT_InitManager(void) {
   return (SAT_Manager)solver;
 }
 
-EXTERN const char * SAT_Version(SAT_Manager mng) {
+EXTERN char * SAT_Version(SAT_Manager mng) {
   CSolver * solver = (CSolver*) mng;
   return solver->version();
 }
