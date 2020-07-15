@@ -38,8 +38,8 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstdio>
-#include <cstring>
 
+#include <string.h>
 #include <set>
 #include <vector>
 #include <dirent.h>
@@ -146,7 +146,7 @@ void read_cnf(SAT_Manager mng, char * filename )
 
 void handle_result(SAT_Manager mng, int outcome, char * filename )
 {
-    string result = "UNKNOWN";
+    char * result = "UNKNOWN";
     switch (outcome) {
     case SATISFIABLE:
         cout << "Instance Satisfiable" << endl;

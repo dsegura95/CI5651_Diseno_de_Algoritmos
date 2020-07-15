@@ -68,8 +68,8 @@ typedef int             int32;
 typedef long            long64;
 #endif
 
-void fatal(const char * fun, const char * file, int lineno, const char * fmt, ...);
-void warning(const char * fun, const char * file, int lineno, const char * fmt, ...);
+void fatal(char * fun, char * file, int lineno, char * fmt, ...);
+void warning(char * fun, char * file, int lineno, char * fmt, ...);
 double get_cpu_time(void);
 
 #endif

@@ -335,7 +335,7 @@ class CSolver:public CDatabase {
       return _stats.total_bubble_move;
     }
 
-    inline const char * version(void) {
+    inline char * version(void) {
       return __ZCHAFF_VERSION__;
     }
 

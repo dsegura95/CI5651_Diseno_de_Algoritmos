@@ -44,7 +44,7 @@ int _global_debug_leveli = 0;
 
 int _global_check_level = 0;
 
-void fatal(const char * fun, const char * file, int lineno, const char * fmt, ...) {
+void fatal(char * fun, char * file, int lineno, char * fmt, ...) {
   va_list ap;
   fprintf(stderr, "***");
   if (fun)
@@ -61,7 +61,7 @@ void fatal(const char * fun, const char * file, int lineno, const char * fmt, ..
   exit(1);
 }
 
-void warning(const char * fun, const char * file, int lineno, const char * fmt, ...) {
+void warning(char * fun, char * file, int lineno, char * fmt, ...) {
   va_list ap;
   fprintf(stderr, "***");
   if (fun)

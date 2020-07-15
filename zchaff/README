@@ -1,5 +1,4 @@
-[2008.10.12]
-This is the same as 2007.3.12 but can be compiled with g++-4.3
+This is the 64 bit version of zchaff.
 
 [2007.3.12]
 Fixed the inefficiency bug in zverify_df. Thanks to Allen Van Gelder and 

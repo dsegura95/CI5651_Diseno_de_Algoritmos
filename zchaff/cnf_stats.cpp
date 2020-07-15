@@ -2,12 +2,11 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstdio>
-#include <cstring>
-
 
 #include <set>
 #include <vector>
 #include <assert.h>
+#include <string.h>
 
 using namespace std;
 
