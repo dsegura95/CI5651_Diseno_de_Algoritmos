@@ -347,7 +347,7 @@ def laura_SAT(V: [int], C: [[int]]) -> ([int], bool):
       for c in C:
         for c_p in c:
           c_p.restaure(key, pop = True)
-      for v in V: v.restaure(key, pop = True) #del_key
+      for v in V: v.restaure(key, pop = True)
 
 
   # Si no hubo un resultado en futuras ramas, conflicto.
