@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2020.1.9)  15 JUL 2020 21:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2020.1.9)  15 JUL 2020 23:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**Proyecto_1_Informe.tex
-(./Proyecto_1_Informe.tex
+**Proyecto_2_Informe.tex
+(./Proyecto_2_Informe.tex
 LaTeX2e <2018-12-01>
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
@@ -811,8 +811,8 @@ zlibrarytrees.code.tex
 File: tikzlibrarytrees.code.tex 2019/02/02 v3.1.1 (3.1.1)
 )
 \l__tikzsymbols_Moai_thickness_dim=\dimen284
-) (./Proyecto_1_Informe.aux)
-\openout1 = `Proyecto_1_Informe.aux'.
+) (./Proyecto_2_Informe.aux)
+\openout1 = `Proyecto_2_Informe.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
 LaTeX Font Info:    ... okay on input line 24.
@@ -907,343 +907,78 @@ LaTeX Info: Redefining \ref on input line 24.
 LaTeX Info: Redefining \pageref on input line 24.
 LaTeX Info: Redefining \nameref on input line 24.
 
-(./Proyecto_1_Informe.out) (./Proyecto_1_Informe.out)
+(./Proyecto_2_Informe.out) (./Proyecto_2_Informe.out)
 \@outlinefile=\write4
-\openout4 = `Proyecto_1_Informe.out'.
+\openout4 = `Proyecto_2_Informe.out'.
 
 
 ABD: EveryShipout initializing macros
-Underfull \hbox (badness 10000) in paragraph at lines 38--42
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 47.
 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 46--47
-
- []
-
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 48.
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 48.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 47.
+LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 51.
 
-Underfull \hbox (badness 10000) in paragraph at lines 48--49
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 50--51
-
- []
+LaTeX Font Info:    No file OMScmtt.fd. on input line 51.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 52--53
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 54--55
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 56--59
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 56--59
-
- []
+LaTeX Font Warning: Font shape `OMS/cmtt/m/n' undefined
+(Font)              using `OMS/cmsy/m/n' instead
+(Font)              for symbol `textbraceleft' on input line 51.
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 60--64
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
+Underfull \hbox (badness 10000) in paragraph at lines 112--113
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 67--72
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 67--72
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 67--72
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 76--77
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 82--87
-
- []
-
-
-Overfull \hbox (14.39862pt too wide) in paragraph at lines 82--87
-\OT1/cmr/m/n/12 Las fun-ciones (1) y (2) las rep-re-sen-ta-mos en los pro-grama
- \OT1/cmr/m/it/12 su-doku[]to[]SAT.py \OT1/cmr/m/n/12 y \OT1/cmr/m/it/12 SAT[]t
-o[]sudoku.py
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 82--87
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 89--90
-
- []
-
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 95--96
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 102--103
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 108--109
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--121
-
- []
-
-[3]
-Underfull \hbox (badness 10000) in paragraph at lines 125--126
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 125--126
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 138--142
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 138--142
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 138--142
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 143--144
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 151--152
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 151--152
-
- []
-
-[4]
-Underfull \hbox (badness 10000) in paragraph at lines 160--161
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 176--177
-
- []
-
-\g__tikzsymbols_savebox_F_0 g 0 G_12_Cooley_1_none_box=\box63
-
-Underfull \hbox (badness 10000) in paragraph at lines 178--181
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 178--181
-
- []
-
-[5] [6]
-Underfull \hbox (badness 10000) in paragraph at lines 200--201
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 200--201
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 212--213
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 214--215
-
- []
-
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 218--219
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 218--219
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 246--248
-
- []
-
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 252--253
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 259--260
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 268--269
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 275--276
-
- []
-
-[9]
-Underfull \hbox (badness 10000) in paragraph at lines 282--283
-
- []
-
-
-Overfull \hbox (18.06995pt too wide) in paragraph at lines 295--296
-\OT1/cmr/m/n/12 Para con-cluir, re-al-izamos la com-par-a-tiva de nues-tra im-p
-le-mentaci^^Son \OT1/cmtt/m/n/12 laura[]SAT \OT1/cmr/m/n/12 con-tra ZCHAFF,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 295--296
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 297--298
-
- []
-
-<Figure_1.png, id=98, 462.528pt x 346.896pt>
-File: Figure_1.png Graphic file (type png)
-<use Figure_1.png>
-Package pdftex.def Info: Figure_1.png  used on input line 299.
-(pdftex.def)             Requested size: 277.51894pt x 208.13919pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 299--300
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 301--302
-
- []
-
-[10 <./Figure_1.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 303--304
-
- []
-
-<Shell_Report.png, id=105, 323.2075pt x 259.97125pt>
-File: Shell_Report.png Graphic file (type png)
-<use Shell_Report.png>
-Package pdftex.def Info: Shell_Report.png  used on input line 305.
-(pdftex.def)             Requested size: 193.926pt x 155.98395pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 305--306
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 307--308
-
- []
-
-<Matrix_Solve.png, id=106, 670.505pt x 627.34375pt>
-File: Matrix_Solve.png Graphic file (type png)
-<use Matrix_Solve.png>
-Package pdftex.def Info: Matrix_Solve.png  used on input line 309.
-(pdftex.def)             Requested size: 268.19725pt x 250.93304pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 309--310
-
- []
-
-[11 <./Shell_Report.png> <./Matrix_Solve.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 311.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 311.
- (./Proyecto_1_Informe.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 311.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 311.
-Package rerunfilecheck Info: File `Proyecto_1_Informe.out' has not changed.
-(rerunfilecheck)             Checksum: CB632FD4AB5DE5AC4C5F8DFBA22FBCC3;505.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 311.
+[3] [4] [5]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 163.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 163.
+ (./Proyecto_2_Informe.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 163.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 163.
+Package rerunfilecheck Info: File `Proyecto_2_Informe.out' has not changed.
+(rerunfilecheck)             Checksum: A620C6B506AAF15584621B5CCFD5B617;339.
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 163.
  ) 
 Here is how much of TeX's memory you used:
- 28059 strings out of 494518
- 548334 string characters out of 6176314
- 628757 words of memory out of 5000000
- 31373 multiletter control sequences out of 15000+600000
- 540091 words of font info for 52 fonts, out of 8000000 for 9000
+ 27998 strings out of 494518
+ 547029 string characters out of 6176314
+ 627645 words of memory out of 5000000
+ 31324 multiletter control sequences out of 15000+600000
+ 539755 words of font info for 50 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 62i,7n,71p,1835b,512s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,6n,67p,1050b,460s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
-10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on Proyecto_1_Informe.pdf (11 pages, 324150 bytes).
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
+i12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pf
+b>
+Output written on Proyecto_2_Informe.pdf (5 pages, 137321 bytes).
 PDF statistics:
- 166 PDF objects out of 1000 (max. 8388607)
- 131 compressed objects within 2 object streams
- 21 named destinations out of 1000 (max. 500000)
- 100 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 107 PDF objects out of 1000 (max. 8388607)
+ 87 compressed objects within 1 object stream
+ 12 named destinations out of 1000 (max. 500000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
