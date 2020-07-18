@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2020.1.9)  15 JUL 2020 23:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2020.1.9)  17 JUL 2020 22:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -941,25 +941,36 @@ Underfull \hbox (badness 10000) in paragraph at lines 115--116
 
  []
 
-[3] [4] [5]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 163.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 163.
+[3] [4]
+<Grafica1.jpg, id=56, 1258.7025pt x 959.585pt>
+File: Grafica1.jpg Graphic file (type jpg)
+<use Grafica1.jpg>
+Package pdftex.def Info: Grafica1.jpg  used on input line 160.
+(pdftex.def)             Requested size: 213.9766pt x 163.12729pt.
+<Grafica2.png, id=57, 462.528pt x 346.896pt>
+File: Grafica2.png Graphic file (type png)
+<use Grafica2.png>
+Package pdftex.def Info: Grafica2.png  used on input line 161.
+(pdftex.def)             Requested size: 222.01091pt x 166.50818pt.
+ [5 <./Grafica1.jpg> <./Grafica2.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 166.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 166.
  (./Proyecto_2_Informe.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 163.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 163.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 166.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 166.
 Package rerunfilecheck Info: File `Proyecto_2_Informe.out' has not changed.
-(rerunfilecheck)             Checksum: A620C6B506AAF15584621B5CCFD5B617;339.
+(rerunfilecheck)             Checksum: 0A7FAC175C8077B41D13D04946EB4830;284.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 163.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 166.
  ) 
 Here is how much of TeX's memory you used:
- 27998 strings out of 494518
- 547029 string characters out of 6176314
+ 28008 strings out of 494518
+ 547165 string characters out of 6176314
  627645 words of memory out of 5000000
- 31324 multiletter control sequences out of 15000+600000
+ 31331 multiletter control sequences out of 15000+600000
  539755 words of font info for 50 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  62i,6n,67p,1050b,460s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -975,10 +986,10 @@ sfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
 i12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pf
 b>
-Output written on Proyecto_2_Informe.pdf (5 pages, 137321 bytes).
+Output written on Proyecto_2_Informe.pdf (5 pages, 231702 bytes).
 PDF statistics:
  107 PDF objects out of 1000 (max. 8388607)
- 87 compressed objects within 1 object stream
- 12 named destinations out of 1000 (max. 500000)
- 61 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 84 compressed objects within 1 object stream
+ 11 named destinations out of 1000 (max. 500000)
+ 63 words of extra memory for PDF output out of 10000 (max. 10000000)
 

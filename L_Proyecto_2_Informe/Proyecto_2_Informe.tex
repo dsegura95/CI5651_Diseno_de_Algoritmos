@@ -152,12 +152,15 @@ Las funciones usadas por nuestro SAT solver original fueron modificadas para mej
 	\item \texttt{laura\_SAT}: El peor caso ocurre cuando todas las variables son asignadas por decisi\'on del backtraking y no de \texttt{verify\_units}, pues se har\'ia un backup del estado actual en cada asignaci\'on. Luego, en cada asignaci\'on se usa memoria  $O(|V| + |C|*l_{max})$. Por lo tanto, como hay $|V|$ variables, entonces la memoria asint\'otica es $O(|V|^2 + |V|*|C|*l_{max})$.
 \end{itemize}
 
-\subsection{Salida}
-
-Aqui hablo yo
-
 \section{Conclusiones}
 
-Aqui tambien hablo yo jeje
+Para concluir, realizamos la comparativa de nuestra implementacio\'on actual de \texttt{laura\_SAT} con la anterior, el cual dio una mejora bastante considerable. Los resultados que obtuvimos en este proyecto y en el anterior fueron los siguientes:
+
+	\begin{center}
+		\includegraphics[scale=0.17]{Grafica1.jpg}
+		\includegraphics[scale=0.48]{Grafica2}
+	\end{center}
+	
+Donde el peor tiempo fue de poco m\'as de 4 segundos y el promedio 1.5 segundos, a diferencia del proyecto anterior en el que el peor caso fue de alrededor de 11 segundos y el promedio fue de 4 segundos, lo que supone una ejecuci\'on 3 veces m\'as r\'apida aproximadamente. Esto se debe a que se evitaron muchas b\'usquedas entre las cl\'ausulas, ya sea para verificar si todas est\'an vac\'ias, buscar las unitarias o las instancias de las variables, y todo gracias a los apuntadores que hay entre cl\'ausulas y variables.
 
 \end{document}
